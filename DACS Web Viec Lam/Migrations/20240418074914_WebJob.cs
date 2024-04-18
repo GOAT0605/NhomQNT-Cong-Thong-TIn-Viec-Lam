@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class WebJob : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -179,38 +179,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(130)", maxLength: 130, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
-                    EmployerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    JobSeekerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Users_Employers_EmployerId",
-                        column: x => x.EmployerId,
-                        principalTable: "Employers",
-                        principalColumn: "EmployerId");
-                    table.ForeignKey(
-                        name: "FK_Users_JobSeeker_JobSeekerId",
-                        column: x => x.JobSeekerId,
-                        principalTable: "JobSeeker",
-                        principalColumn: "JobSeekerId");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Job_EmployerId",
                 table: "Job",
@@ -240,21 +208,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "IX_Titles_CategoryId",
                 table: "Titles",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_CategoryId",
-                table: "Users",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_EmployerId",
-                table: "Users",
-                column: "EmployerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_JobSeekerId",
-                table: "Users",
-                column: "JobSeekerId");
         }
 
         /// <inheritdoc />
@@ -267,7 +220,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Employers");
+
+            migrationBuilder.DropTable(
+                name: "JobSeeker");
 
             migrationBuilder.DropTable(
                 name: "Times");
@@ -276,16 +232,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "Titles");
 
             migrationBuilder.DropTable(
-                name: "Employers");
-
-            migrationBuilder.DropTable(
-                name: "JobSeeker");
+                name: "Educations");
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Educations");
         }
     }
 }
