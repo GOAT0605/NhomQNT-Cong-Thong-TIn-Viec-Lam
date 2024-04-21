@@ -10,6 +10,14 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
  .AddDefaultTokenProviders()
  .AddDefaultUI()
  .AddEntityFrameworkStores<ApplicationDbContext>();
+//thong bao loi quyen truy cap
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.LogoutPath = $"/Identity/Account/AccessDenied";
+
+});
 builder.Services.AddRazorPages();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -22,7 +30,18 @@ app.UseRouting();
 app.UseAuthentication(); ;
 app.UseAuthorization();
 app.MapRazorPages();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(name: "Admin", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapControllerRoute(name: "JobSeeker", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapControllerRoute(name: "Company", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapControllerRoute(name: "Employer", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+    //endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+
+});
 app.MapControllerRoute(
+
  name: "default",
  pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
