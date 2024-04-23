@@ -27,7 +27,7 @@ namespace DACS_Web_Viec_Lam.Models
         public string Educations { get; set; }
 
         public Education Education { get; set; }
-
+     
         // public ICollection<Experience> Experiences { get; set; }
         //public ICollection<Education> Educations { get; set; }
 

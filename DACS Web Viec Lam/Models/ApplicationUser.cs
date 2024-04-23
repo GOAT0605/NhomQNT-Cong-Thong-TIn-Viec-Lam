@@ -1,4 +1,6 @@
-﻿namespace DACS_Web_Viec_Lam.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace DACS_Web_Viec_Lam.Models
 {
     public class ApplicationUser
     {
