@@ -1,4 +1,5 @@
 using DACS_Web_Viec_Lam.Data;
+using DACS_Web_Viec_Lam.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 });
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<IJobSeekerRepository, EFJobSeekerRepository>();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -44,4 +46,14 @@ app.MapControllerRoute(
 
  name: "default",
  pattern: "{controller=Employer}/{action=Index}/{id?}");
+
+
+//app.MapControllerRoute(
+
+// name: "JobSeeker",
+// pattern: "{controller=jobFinder}/{action=Index}/{id?}");
+app.MapControllerRoute(
+name: "JobSeeker",
+pattern: "{ area: exists}/{controller=JobSeeker}/{action = Index}/{ id ?}"
+    );
 app.Run();

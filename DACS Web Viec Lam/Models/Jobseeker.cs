@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace DACS_Web_Viec_Lam.Models
 {
     public class JobSeeker
     {
+       
         public string JobSeekerId { get; set; }
 
         [Required(ErrorMessage = "Please provide a full name.")]
@@ -24,9 +26,13 @@ namespace DACS_Web_Viec_Lam.Models
         public string Experiences { get; set; }
 
         
-        public string Educations { get; set; }
+        public string? Educations { get; set; }
 
         public Education Education { get; set; }
+        public string userId { get; set; }
+        public IdentityUser User { get; set; }
+        //public string ApplicationUserId { get; set; }
+        //public ApplicationUser ApplicationUser { get; set; }
 
         // public ICollection<Experience> Experiences { get; set; }
         //public ICollection<Education> Educations { get; set; }
