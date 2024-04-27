@@ -19,6 +19,6 @@ namespace DACS_Web_Viec_Lam.Data.Entities
       //  public ICollection<Skill>? Skills { get; set; }
         public ICollection<Title>? Titles { get; set; }
       //  public ICollection<Province>? Provinces { get; set; }
-        public ICollection<User>? AppUsers { get; set; }
+       // public ICollection<User>? AppUsers { get; set; }
     }
 }
