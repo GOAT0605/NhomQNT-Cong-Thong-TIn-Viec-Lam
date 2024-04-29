@@ -1,10 +1,13 @@
+
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace DACS_Web_Viec_Lam.Models
 {
     public class JobSeeker
     {
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
@@ -20,6 +23,7 @@ namespace DACS_Web_Viec_Lam.Models
         //    Random rand = new Random();
         //    return rand.Next(100000, 999999); // Adjust the range as needed
         //}
+
 
         [Required(ErrorMessage = "Please provide a full name.")]
         [StringLength(130, ErrorMessage = "Name must be less than 130 characters.")]
@@ -42,6 +46,7 @@ namespace DACS_Web_Viec_Lam.Models
         public string? Educations { get; set; }
         //[Required(ErrorMessage = "Please provide a field of study.")]
         //public string FieldOfStudy { get; set; }
+
 
         //[Required(ErrorMessage = "Please provide a school name.")]
         //public string? SchoolName { get; set; }

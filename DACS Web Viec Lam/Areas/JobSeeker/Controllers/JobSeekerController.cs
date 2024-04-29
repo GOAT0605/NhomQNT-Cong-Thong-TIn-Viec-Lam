@@ -1,7 +1,9 @@
+
 ﻿using DACS_Web_Viec_Lam.Interface;
 using DACS_Web_Viec_Lam.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 {
@@ -76,6 +78,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(JobSeeker);
+
         }
     }
 }

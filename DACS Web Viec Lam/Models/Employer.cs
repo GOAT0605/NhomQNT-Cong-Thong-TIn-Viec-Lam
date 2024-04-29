@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace DACS_Web_Viec_Lam.Models
 {
     public class Employer
     {
+        
         public string EmployerId { get; set; }
         [Required, StringLength(130)]
         public string CompanyName { get; set; }
@@ -12,6 +14,8 @@ namespace DACS_Web_Viec_Lam.Models
         public string contactMail { get; set; }
 
         public string contactPhone { get; set; }
-
+        public string ApplicationUserId { get; set; }
+        public string userId { get; set; }
+        public IdentityUser User { get; set; }
     }
 }
