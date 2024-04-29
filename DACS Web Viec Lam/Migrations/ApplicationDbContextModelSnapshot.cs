@@ -145,17 +145,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FieldOfStudy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GraduationYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SchoolName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("EducationId");
 
                     b.ToTable("Educations");
@@ -210,7 +199,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("JobSeekerId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("JobSeekerId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -238,7 +230,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasIndex("EmployerId");
 
-                    b.HasIndex("JobSeekerId");
+                    b.HasIndex("JobSeekerId1");
 
                     b.HasIndex("TimeId");
 
@@ -249,19 +241,18 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.JobSeeker", b =>
                 {
-                    b.Property<string>("JobSeekerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("JobSeekerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobSeekerId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("EducationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Educations")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -284,8 +275,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasColumnType("nvarchar(11)");
 
                     b.HasKey("JobSeekerId");
-
-                    b.HasIndex("EducationId");
 
                     b.ToTable("JobSeeker");
                 });
@@ -507,7 +496,9 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
                         .WithMany()
-                        .HasForeignKey("JobSeekerId");
+                        .HasForeignKey("JobSeekerId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Time", null)
                         .WithMany("Jobs")
@@ -522,17 +513,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Navigation("Employer");
 
                     b.Navigation("JobSeeker");
-                });
-
-            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.JobSeeker", b =>
-                {
-                    b.HasOne("DACS_Web_Viec_Lam.Models.Education", "Education")
-                        .WithMany()
-                        .HasForeignKey("EducationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Education");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,10 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DACS_Web_Viec_Lam.Models
 {
     public class JobSeeker
     {
-        public string JobSeekerId { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
+        public int JobSeekerId { get; set; }
+        //public JobFinder()
+        //{
+        //    JobSeekerId = GenerateRandomId();
+        //}
+
+        //private int GenerateRandomId()
+        //{
+        //    // Generate a random integer using a random number generator
+        //    Random rand = new Random();
+        //    return rand.Next(100000, 999999); // Adjust the range as needed
+        //}
 
         [Required(ErrorMessage = "Please provide a full name.")]
         [StringLength(130, ErrorMessage = "Name must be less than 130 characters.")]
@@ -23,20 +38,19 @@ namespace DACS_Web_Viec_Lam.Models
         public string Description { get; set; }
         public string Experiences { get; set; }
 
-        
-        public string Educations { get; set; }
 
-        public Education Education { get; set; }
-     
-        // public ICollection<Experience> Experiences { get; set; }
-        //public ICollection<Education> Educations { get; set; }
+        public string? Educations { get; set; }
+        //[Required(ErrorMessage = "Please provide a field of study.")]
+        //public string FieldOfStudy { get; set; }
 
+        //[Required(ErrorMessage = "Please provide a school name.")]
+        //public string? SchoolName { get; set; }
 
-        // Additional properties can be added as needed
-
-        // Navigation properties
-
-        // Add more navigation properties as needed
+        //[Required(ErrorMessage = "Please provide a graduation year.")]
+        //public int? GraduationYear { get; set; }
+      //  public Education Education { get; set; }
+        //public string? userId { get; set; }
+        //public IdentityUser User { get; set; }
     }
 
 }
