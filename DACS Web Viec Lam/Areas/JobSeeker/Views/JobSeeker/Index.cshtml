@@ -29,6 +29,9 @@
                 @Html.DisplayNameFor(model => model.Experiences)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.userId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Educations)
             </th>
             <th></th>
@@ -49,9 +52,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
+               
             <td>
                 @Html.DisplayFor(modelItem => item.Experiences)
             </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.userId)
+                </th>
             <td>
                 @Html.DisplayFor(modelItem => item.Educations)
             </td>
