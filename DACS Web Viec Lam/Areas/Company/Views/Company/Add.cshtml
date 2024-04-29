@@ -1,0 +1,58 @@
+﻿@model DACS_Web_Viec_Lam.Models.Employer
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Areas/Company/Views/Shared/head_foot.cshtml";
+}
+
+<h1>Add</h1>
+
+<h4>Employer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EmployerId" class="control-label"></label>
+                <input asp-for="EmployerId" class="form-control" />
+                <span asp-validation-for="EmployerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyName" class="control-label"></label>
+                <input asp-for="CompanyName" class="form-control" />
+                <span asp-validation-for="CompanyName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyDiscription" class="control-label"></label>
+                <input asp-for="CompanyDiscription" class="form-control" />
+                <span asp-validation-for="CompanyDiscription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="contactMail" class="control-label"></label>
+                <input asp-for="contactMail" class="form-control" />
+                <span asp-validation-for="contactMail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="contactPhone" class="control-label"></label>
+                <input asp-for="contactPhone" class="form-control" />
+                <span asp-validation-for="contactPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+}
