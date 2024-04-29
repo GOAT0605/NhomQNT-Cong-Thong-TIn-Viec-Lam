@@ -1,61 +1,70 @@
-﻿@model DACS_Web_Viec_Lam.Models.JobSeeker
+
+@model IEnumerable<DACS_Web_Viec_Lam.Models.JobSeeker>
+
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/JobSeeker/Views/Shared/head_foot.cshtml";
 }
 
-<h1>CV Info</h1>
-<a class="btn btn-primary" asp-action="Add">Add</a>
-<div>
-    <h4>JobSeeker</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Experiences)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Experiences)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Educations)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Educations)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd> 
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.JobSeekerId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Add">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Experiences)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Educations)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Experiences)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Educations)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.JobSeekerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.JobSeekerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.JobSeekerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

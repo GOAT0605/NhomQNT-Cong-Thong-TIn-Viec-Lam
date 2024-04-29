@@ -1,97 +1,84 @@
-﻿using DACS_Web_Viec_Lam.Data;
+
+﻿using DACS_Web_Viec_Lam.Interface;
 using DACS_Web_Viec_Lam.Models;
-using DACS_Web_Viec_Lam.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 {
     [Area("JobSeeker")]
-    [Authorize(Roles = "JobSeeker")]
+    [Authorize(Roles = SD.Role_JobSeeker)]
     public class JobSeekerController : Controller
     {
-        private readonly IJobSeekerRepository _jobSeekerRepository;
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly Random _random = new Random();
-        private const string CharSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        public JobSeekerController(ApplicationDbContext context, UserManager<IdentityUser> userManager,
-            IJobSeekerRepository jobSeekerRepository)
+       
+        private readonly IJobSeekerRepository _JobSeekerRepository;
+
+        public JobSeekerController(IJobSeekerRepository JobSeekerRepository)
         {
-            _context = context;
-            _userManager = userManager;
-            _jobSeekerRepository = jobSeekerRepository;
+            _JobSeekerRepository = JobSeekerRepository;
         }
-        public IActionResult Index()
+        
+        public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var JobSeekers = await _JobSeekerRepository.GetAllAsync();
 
-            // Retrieve the JobSeeker based on the user's ID
-            var jobSeeker = _context.JobSeeker
-                .Include(j => j.User) // Include if there's a navigation property to the User table
-                .FirstOrDefault(j => j.userId == userId);
-
-            if (jobSeeker == null)
-            {
-                return RedirectToAction("Add");
-            }
-
-            return View(jobSeeker); // Pass the JobSeeker entity to the view
-           
+            return View(JobSeekers);
         }
-        public IActionResult AddAsync()
+        // Hiển thị form thêm sản phẩm mới
+        public IActionResult Add()
         {
+
             return View();
         }
 
+        // Xử lý thêm sản phẩm mới
         [HttpPost]
-        public async Task<IActionResult> Add(Models.JobSeeker jobSeeker)
+        public async Task<IActionResult> Add(Models.JobSeeker JobSeeker)
         {
             if (ModelState.IsValid)
             {
-                var userinfo = await _userManager.GetUserAsync(User);
-
-                if (userinfo != null)
-                {
-                    // Generate a unique user ID
-                    //string userId;
-                    //do
-                    //{
-                    //    userId = GenerateRandomString(20); // Adjust the length as needed
-                    //} while (_jobSeekerRepository.Exists(userId) || _context.JobSeeker.Any(j => j.JobSeekerId == userId));
-                    //jobSeeker.JobSeekerId = userId;
-                    jobSeeker.userId = userinfo.Id;
-                
-                    await _jobSeekerRepository.AddAsync(jobSeeker);
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    return RedirectToAction("Error", "Home");
-                }
+                await _JobSeekerRepository.AddAsync(JobSeeker);
+                return RedirectToAction(nameof(Index));
             }
-
-            return View(jobSeeker);
-
+            return View(JobSeeker);
         }
 
-        private string GenerateRandomString(int length)
+        // Hiển thị thông tin chi tiết sản phẩm
+        public async Task<IActionResult> Display(int id)
         {
-            StringBuilder sb = new StringBuilder();
-
-            // Generate random characters for the string
-            for (int i = 0; i < length; i++)
+            var JobSeeker = await _JobSeekerRepository.GetByIdAsync(id);
+            if (JobSeeker == null)
             {
-                int index = _random.Next(CharSet.Length);
-                sb.Append(CharSet[index]);
+                return NotFound();
             }
+            return View(JobSeeker);
+        }
 
-            return sb.ToString();
+        // Hiển thị form cập nhật sản phẩm
+        public async Task<IActionResult> Update(int id)
+        {
+            var JobSeeker = await _JobSeekerRepository.GetByIdAsync(id);
+            if (JobSeeker == null)
+            {
+                return NotFound();
+            }
+            return View(JobSeeker);
+        }
+
+        // Xử lý cập nhật sản phẩm
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, Models.JobSeeker JobSeeker)
+        {
+
+
+            if (ModelState.IsValid)
+            {
+                await _JobSeekerRepository.UpdateAsync(JobSeeker);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(JobSeeker);
+
         }
     }
 }
