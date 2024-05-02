@@ -48,8 +48,8 @@ namespace DACS_Web_Viec_Lam.Models
 
         //[Required(ErrorMessage = "Please provide a graduation year.")]
         //public int? GraduationYear { get; set; }
-      //  public Education Education { get; set; }
-        //public string? userId { get; set; }
+        //  public Education Education { get; set; }
+        public string? userId { get; set; }
         //public IdentityUser User { get; set; }
     }
 

@@ -1,7 +1,9 @@
-﻿using DACS_Web_Viec_Lam.Interface;
+﻿using DACS_Web_Viec_Lam.Data;
+using DACS_Web_Viec_Lam.Interface;
 using DACS_Web_Viec_Lam.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 {
@@ -9,14 +11,16 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
     [Authorize(Roles = SD.Role_JobSeeker)]
     public class JobSeekerController : Controller
     {
-       
+
+        private readonly ApplicationDbContext _context;
         private readonly IJobSeekerRepository _JobSeekerRepository;
 
-        public JobSeekerController(IJobSeekerRepository JobSeekerRepository)
+        public JobSeekerController(IJobSeekerRepository JobSeekerRepository, ApplicationDbContext context)
         {
             _JobSeekerRepository = JobSeekerRepository;
+            _context = context;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             var JobSeekers = await _JobSeekerRepository.GetAllAsync();
@@ -36,21 +40,31 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                JobSeeker.userId = userId; // Set userId before adding to the repository
                 await _JobSeekerRepository.AddAsync(JobSeeker);
                 return RedirectToAction(nameof(Index));
             }
             return View(JobSeeker);
         }
 
+
         // Hiển thị thông tin chi tiết sản phẩm
-        public async Task<IActionResult> Display(int id)
+        public async Task<IActionResult> Display()
         {
-            var JobSeeker = await _JobSeekerRepository.GetByIdAsync(id);
-            if (JobSeeker == null)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Retrieve the JobSeeker based on the user's ID
+            var jobSeeker = _context.JobSeeker
+                .FirstOrDefault(j => j.userId == userId);
+
+            if (jobSeeker == null)
             {
-                return NotFound();
+                // If no matching JobSeeker found, redirect to the "Add" action
+                return RedirectToAction("Add");
             }
-            return View(JobSeeker);
+
+            return View(jobSeeker);
         }
 
         // Hiển thị form cập nhật sản phẩm

@@ -1,0 +1,55 @@
+﻿@model DACS_Web_Viec_Lam.Models.JobSeeker
+
+@{
+    ViewData["Title"] = "Display";
+    Layout = "~/Areas/JobSeeker/Views/Shared/head_foot.cshtml";
+}
+
+<h1>Display</h1>
+
+<div>
+    <h4>JobSeeker</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Experiences)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Experiences)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Educations)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Educations)
+        </dd>    
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.JobSeekerId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
