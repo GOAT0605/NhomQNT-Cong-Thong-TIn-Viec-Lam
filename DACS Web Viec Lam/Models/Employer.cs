@@ -12,6 +12,6 @@ namespace DACS_Web_Viec_Lam.Models
         public string contactMail { get; set; }
 
         public string contactPhone { get; set; }
-
+        public string? userId { get; set; }
     }
 }
