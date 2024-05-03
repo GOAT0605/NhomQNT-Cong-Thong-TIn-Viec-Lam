@@ -3,7 +3,10 @@ using DACS_Web_Viec_Lam.Interface;
 using DACS_Web_Viec_Lam.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+
 using Microsoft.EntityFrameworkCore;
+
 using System.Security.Claims;
 
 namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
@@ -12,6 +15,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
     [Authorize(Roles = SD.Role_JobSeeker)]
     public class JobSeekerController : Controller
     {
+
         private readonly ApplicationDbContext _context;
         private readonly IJobSeekerRepository _JobSeekerRepository;
 
@@ -20,7 +24,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
             _JobSeekerRepository = JobSeekerRepository;
             _context = context;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             var JobSeekers = await _JobSeekerRepository.GetAllAsync();
