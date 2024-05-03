@@ -22,6 +22,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 builder.Services.AddScoped<IJobSeekerRepository, EFJobSeekerRepository>();
 builder.Services.AddScoped<ICompanyRepository, EFCompanyRepository>();
+builder.Services.AddScoped<IJobRepository, EFJobRepository>();
 builder.Services.AddRazorPages();
 var app = builder.Build();
 // Configure the HTTP request pipeline.

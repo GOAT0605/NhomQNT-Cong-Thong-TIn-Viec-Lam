@@ -34,5 +34,7 @@ namespace DACS_Web_Viec_Lam.Interface
             _context.Employers.Update(product);
             await _context.SaveChangesAsync();
         }
+
+        
     }
 }
