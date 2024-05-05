@@ -40,10 +40,24 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 
         // Xử lý thêm sản phẩm mới
         [HttpPost]
-        public async Task<IActionResult> Add(Models.JobSeeker JobSeeker)
+        public async Task<IActionResult> Add(Models.JobSeeker JobSeeker, IFormFile imageUrl,List<IFormFile> imageUrls)
         {
             if (ModelState.IsValid)
             {
+                if (imageUrl != null)
+                {
+                    // Lưu hình ảnh đại diện
+                    JobSeeker.ImageUrl = await SaveImage(imageUrl);
+                }
+                if (imageUrls != null)
+                {
+                    JobSeeker.ImageUrls = new List<EmployerImage>();
+                    foreach (var file in imageUrls)
+                    {
+                        // Lưu các hình ảnh khác
+                        JobSeeker.ImageUrl = await SaveImage(imageUrl);
+                    }
+                }
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 JobSeeker.userId = userId; // Set userId before adding to the repository
                 await _JobSeekerRepository.AddAsync(JobSeeker);
@@ -51,6 +65,16 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
             }
             return View(JobSeeker);
         }
+        private async Task<string> SaveImage(IFormFile image)
+        {
+            var savePath = Path.Combine("wwwroot/images", image.FileName); // Thay            đổi đường dẫn theo cấu hình của bạn
+ using (var fileStream = new FileStream(savePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+            return "/images/" + image.FileName; // Trả về đường dẫn tương đối
+        }
+
 
 
         // Hiển thị thông tin chi tiết sản phẩm

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class laaaaaa : Migration
+    public partial class _123 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -88,7 +88,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyDiscription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     contactMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    contactPhone = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    contactPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -106,7 +108,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Experiences = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Educations = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Educations = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -273,6 +276,26 @@ namespace DACS_Web_Viec_Lam.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmployerImage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmployerId = table.Column<int>(type: "int", nullable: false),
+                    EmployerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployerImage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployerImage_Employers_EmployerId1",
+                        column: x => x.EmployerId1,
+                        principalTable: "Employers",
+                        principalColumn: "EmployerId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Job",
                 columns: table => new
                 {
@@ -357,6 +380,11 @@ namespace DACS_Web_Viec_Lam.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmployerImage_EmployerId1",
+                table: "EmployerImage",
+                column: "EmployerId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Job_EmployerId",
                 table: "Job",
                 column: "EmployerId");
@@ -402,6 +430,9 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             migrationBuilder.DropTable(
                 name: "Educations");
+
+            migrationBuilder.DropTable(
+                name: "EmployerImage");
 
             migrationBuilder.DropTable(
                 name: "Job");

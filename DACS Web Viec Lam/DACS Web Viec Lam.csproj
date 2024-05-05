@@ -29,6 +29,7 @@
     <Folder Include="Areas\Company\Models\" />
     <Folder Include="Areas\JobSeeker\Data\" />
     <Folder Include="Areas\JobSeeker\Models\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>
