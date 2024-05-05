@@ -35,16 +35,40 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
 
         // Xử lý thêm sản phẩm mới
         [HttpPost]
-        public async Task<IActionResult> Add(Models.Employer Employer)
+        public async Task<IActionResult> Add(Models.Employer Employer, IFormFile imageUrl,
+List<IFormFile> imageUrls)
         {
             if (ModelState.IsValid)
             {
+                if (imageUrl != null)
+                {
+                    // Lưu hình ảnh đại diện
+                    Employer.ImageUrl = await SaveImage(imageUrl);
+                }
+                if (imageUrls != null)
+                {
+                    Employer.ImageUrls = new List<EmployerImage>();
+                    foreach (var file in imageUrls)
+                    {
+                        // Lưu các hình ảnh khác
+                     Employer.ImageUrl = await SaveImage(imageUrl);
+                    }
+                }
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Employer.userId = userId; // Set userId before adding to the repository
                 await _EmployerRepository.AddAsync(Employer);
                 return RedirectToAction(nameof(Index));
             }
             return View(Employer);
+        }
+        private async Task<string> SaveImage(IFormFile image)
+        {
+            var savePath = Path.Combine("wwwroot/images", image.FileName); // Thay đổi đường dẫn theo cấu hình của bạn
+ using (var fileStream = new FileStream(savePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+            return "/images/" + image.FileName; // Trả về đường dẫn tương đối
         }
 
         // Hiển thị thông tin chi tiết sản phẩm

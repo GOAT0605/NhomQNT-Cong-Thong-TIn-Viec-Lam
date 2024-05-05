@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240428150109_laaaaaa")]
-    partial class laaaaaa
+    [Migration("20240505144447_1233456")]
+    partial class _1233456
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,6 +170,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasMaxLength(130)
                         .HasColumnType("nvarchar(130)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("contactMail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -178,9 +181,42 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("EmployerId");
 
                     b.ToTable("Employers");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.EmployerImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployerId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("JobSeekerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployerId1");
+
+                    b.HasIndex("JobSeekerId");
+
+                    b.ToTable("EmployerImage");
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Job", b =>
@@ -272,10 +308,16 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasMaxLength(130)
                         .HasColumnType("nvarchar(130)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("JobSeekerId");
 
@@ -491,6 +533,21 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.EmployerImage", b =>
+                {
+                    b.HasOne("DACS_Web_Viec_Lam.Models.Employer", "Employer")
+                        .WithMany("ImageUrls")
+                        .HasForeignKey("EmployerId1");
+
+                    b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
+                        .WithMany("ImageUrls")
+                        .HasForeignKey("JobSeekerId");
+
+                    b.Navigation("Employer");
+
+                    b.Navigation("JobSeeker");
+                });
+
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Job", b =>
                 {
                     b.HasOne("DACS_Web_Viec_Lam.Models.Employer", "Employer")
@@ -582,6 +639,16 @@ namespace DACS_Web_Viec_Lam.Migrations
             modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Title", b =>
                 {
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Employer", b =>
+                {
+                    b.Navigation("ImageUrls");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.JobSeeker", b =>
+                {
+                    b.Navigation("ImageUrls");
                 });
 #pragma warning restore 612, 618
         }
