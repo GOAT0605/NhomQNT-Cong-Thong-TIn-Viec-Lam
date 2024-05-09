@@ -9,17 +9,7 @@ namespace DACS_Web_Viec_Lam.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int JobSeekerId { get; set; }
-        //public JobFinder()
-        //{
-        //    JobSeekerId = GenerateRandomId();
-        //}
-
-        //private int GenerateRandomId()
-        //{
-        //    // Generate a random integer using a random number generator
-        //    Random rand = new Random();
-        //    return rand.Next(100000, 999999); // Adjust the range as needed
-        //}
+      
 
         [Required(ErrorMessage = "Please provide a full name.")]
         [StringLength(130, ErrorMessage = "Name must be less than 130 characters.")]
@@ -51,6 +41,17 @@ namespace DACS_Web_Viec_Lam.Models
 
         public string? userId { get; set; }
         //public IdentityUser User { get; set; }
+        //public JobFinder()
+        //{
+        //    JobSeekerId = GenerateRandomId();
+        //}
+
+        //private int GenerateRandomId()
+        //{
+        //    // Generate a random integer using a random number generator
+        //    Random rand = new Random();
+        //    return rand.Next(100000, 999999); // Adjust the range as needed
+        //}
     }
 
 }

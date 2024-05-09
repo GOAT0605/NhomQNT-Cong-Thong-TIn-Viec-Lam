@@ -1,7 +1,11 @@
-﻿using DACS_Web_Viec_Lam.Interface;
+﻿using DACS_Web_Viec_Lam.Data;
+using DACS_Web_Viec_Lam.Interface;
 using DACS_Web_Viec_Lam.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
 {
@@ -10,32 +14,77 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
     public class JobController : Controller
     {
         private readonly IJobRepository _jobRepository;
-
-        public JobController(IJobRepository JobRepository)
+        private readonly ITitleRepository _titleRepository;
+        private readonly ApplicationDbContext _context;
+        public JobController(IJobRepository JobRepository, ITitleRepository titleRepository, ApplicationDbContext context)
         {
             _jobRepository = JobRepository;
+            _titleRepository = titleRepository;
+            _context = context;
         }
         public async Task<IActionResult> Index()
         {
-            var Employers = await _jobRepository.GetAllAsync();
+            //var Employers = await _jobRepository.GetAllAsync();
+            //foreach (var title in Employers)
+            //{
+            //    if (title.TitleId != null)
+            //    {
+            //        //title.Title = await _titleRepository.GetByIdAsync(title.TitleId);
+            //    }
+            //}
+           
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var employer = _context.Employers.FirstOrDefault(j => j.userId == userId);
 
-            return View(Employers);
+                if (employer == null)
+                {
+                    // No employer associated with the user, redirect to the Add action in CompanyController
+                    return RedirectToAction("Add", "Company");
+                }
+
+                // Retrieve job entries that match the employer's ID
+                var employers = await _jobRepository.GetByUserIdAsync(employer.EmployerId);
+                return View(employers);
+            
+
         }
-        public IActionResult Add()
+        public async Task<IActionResult> AddAsync()
         {
+            var titles = await _titleRepository.GetAllAsync();
+            ViewBag.TitleId = new SelectList(titles, "Id", "Name");
 
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Models.Job job)
+      public async Task<IActionResult> Add(Job job)
+{
+    if (ModelState.IsValid)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var EmployerID = _context.Employers.FirstOrDefault(j => j.userId == userId);
+
+        if (EmployerID == null)
         {
-            if (ModelState.IsValid)
-            {
-                await _jobRepository.AddAsync(job);
-                return RedirectToAction(nameof(Index));
-            }
+            // No Employer ID found, redirect user to Add view
+            ModelState.AddModelError("", "You need to create an employer profile first.");
+            var title = await _titleRepository.GetAllAsync();
+            ViewBag.TitleId = new SelectList(title, "Id", "Name");
             return View(job);
         }
+
+        // Employer ID found, proceed with adding the job
+        job.EmployerId = EmployerID.EmployerId;
+        await _jobRepository.AddAsync(job);
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ModelState is not valid, return the Add view with validation errors
+    var titles = await _titleRepository.GetAllAsync();
+    ViewBag.TitleId = new SelectList(titles, "Id", "Name");
+    return View(job);
+}
+
+
         public async Task<IActionResult> Display(int id)
         {
             var Employer = await _jobRepository.GetByIdAsync(id);
@@ -54,6 +103,8 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             {
                 return NotFound();
             }
+            var titles = await _titleRepository.GetAllAsync();
+            ViewBag.TitleId = new SelectList(titles, "Id", "Name", Employer.TitleId);
             return View(Employer);
         }
 

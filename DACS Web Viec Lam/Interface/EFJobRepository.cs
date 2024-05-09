@@ -33,5 +33,12 @@ namespace DACS_Web_Viec_Lam.Interface
             _context.Job.Update(job);
             await _context.SaveChangesAsync();
         }
+
+      
+
+        public async Task<IEnumerable<object>> GetByUserIdAsync(int employerId)
+        {
+            return await _context.Job.Where(j => j.EmployerId == employerId).ToListAsync();
+        }
     }
 }

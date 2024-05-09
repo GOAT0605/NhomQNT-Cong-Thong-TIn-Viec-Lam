@@ -23,6 +23,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<IJobSeekerRepository, EFJobSeekerRepository>();
 builder.Services.AddScoped<ICompanyRepository, EFCompanyRepository>();
 builder.Services.AddScoped<IJobRepository, EFJobRepository>();
+builder.Services.AddScoped<ITitleRepository, EFTitleRepository>();
 builder.Services.AddRazorPages();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -49,4 +50,9 @@ app.MapControllerRoute(
 
  name: "default",
  pattern: "{controller=Employer}/{action=Index}/{id?}");
+
+//app.MapControllerRoute(
+//name: "Employer",
+//pattern: "{area:exists}/{controller=Employer}/{action=Index}/{id?}"
+//);
 app.Run();

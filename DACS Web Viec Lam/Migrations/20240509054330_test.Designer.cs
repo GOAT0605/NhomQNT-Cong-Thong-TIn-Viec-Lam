@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240502125601_test2")]
-    partial class test2
+    [Migration("20240509054330_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,9 +87,6 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<bool?>("Disable")
                         .HasColumnType("bit");
 
@@ -106,8 +103,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Titles");
                 });
@@ -155,8 +150,11 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Employer", b =>
                 {
-                    b.Property<string>("EmployerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("EmployerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployerId"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -176,6 +174,9 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.Property<string>("contactPhone")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("userId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployerId");
@@ -198,13 +199,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmployerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("EmployerId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("JobSeekerId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("JobSeekerId1")
+                    b.Property<int?>("JobSeekerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
@@ -233,7 +231,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasIndex("EmployerId");
 
-                    b.HasIndex("JobSeekerId1");
+                    b.HasIndex("JobSeekerId");
 
                     b.HasIndex("TimeId");
 
@@ -483,17 +481,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Title", b =>
-                {
-                    b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Category", "Category")
-                        .WithMany("Titles")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Job", b =>
                 {
                     b.HasOne("DACS_Web_Viec_Lam.Models.Employer", "Employer")
@@ -502,9 +489,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
                         .WithMany()
-                        .HasForeignKey("JobSeekerId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobSeekerId");
 
                     b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Time", null)
                         .WithMany("Jobs")
@@ -570,11 +555,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Category", b =>
-                {
-                    b.Navigation("Titles");
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Time", b =>

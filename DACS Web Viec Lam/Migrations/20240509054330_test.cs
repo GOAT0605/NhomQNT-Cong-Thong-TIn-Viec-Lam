@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class laaaaaa : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,12 +83,14 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "Employers",
                 columns: table => new
                 {
-                    EmployerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EmployerId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CompanyName = table.Column<string>(type: "nvarchar(130)", maxLength: 130, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompanyDiscription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     contactMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    contactPhone = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    contactPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -106,7 +108,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Experiences = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Educations = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Educations = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -141,6 +144,22 @@ namespace DACS_Web_Viec_Lam.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Times", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Titles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Disable = table.Column<bool>(type: "bit", nullable: true),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Popular = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Titles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,29 +269,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Titles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Disable = table.Column<bool>(type: "bit", nullable: true),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Popular = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Titles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Titles_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Job",
                 columns: table => new
                 {
@@ -285,9 +281,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Requirement = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationDeadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EmployerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    JobSeekerId1 = table.Column<int>(type: "int", nullable: false),
-                    JobSeekerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmployerId = table.Column<int>(type: "int", nullable: true),
+                    JobSeekerId = table.Column<int>(type: "int", nullable: true),
                     TimeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -299,11 +294,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                         principalTable: "Employers",
                         principalColumn: "EmployerId");
                     table.ForeignKey(
-                        name: "FK_Job_JobSeeker_JobSeekerId1",
-                        column: x => x.JobSeekerId1,
+                        name: "FK_Job_JobSeeker_JobSeekerId",
+                        column: x => x.JobSeekerId,
                         principalTable: "JobSeeker",
-                        principalColumn: "JobSeekerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "JobSeekerId");
                     table.ForeignKey(
                         name: "FK_Job_Times_TimeId",
                         column: x => x.TimeId,
@@ -362,9 +356,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                 column: "EmployerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Job_JobSeekerId1",
+                name: "IX_Job_JobSeekerId",
                 table: "Job",
-                column: "JobSeekerId1");
+                column: "JobSeekerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Job_TimeId",
@@ -375,11 +369,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "IX_Job_TitleId",
                 table: "Job",
                 column: "TitleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Titles_CategoryId",
-                table: "Titles",
-                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -399,6 +388,9 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Educations");
@@ -426,9 +418,6 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             migrationBuilder.DropTable(
                 name: "Titles");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
         }
     }
 }

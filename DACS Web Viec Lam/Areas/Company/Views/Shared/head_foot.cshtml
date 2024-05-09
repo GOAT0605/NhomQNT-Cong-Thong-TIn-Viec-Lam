@@ -104,7 +104,7 @@
                     if (User.IsInRole("Company"))
                     {
                         <a href="@Url.Action("Add","Job", new { area = "Company" } )" class="nav-item nav-link text-dark">Đăng Công Việc</a>
-                        <a href="@Url.Action("Index","Job", new { area = "Company" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">CV<i class=""></i></a>
+                        <a href="@Url.Action("Display","Company", new { area = "Company" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Công Ty<i class=""></i></a>
 
                         @*  <a href="@Url.Action("Index","JobSeeker", new { area = "JobSeeker" } )" class="nav-item nav-link active">Trang chủ</a> *@
                         @*   <li class="nav-item">
