@@ -40,6 +40,8 @@ namespace DACS_Web_Viec_Lam.Models
         //public int? GraduationYear { get; set; }
 
         public string? userId { get; set; }
+        public string? ImageUrl { get; set; } // Đường dẫn đến hình ảnh đại diện
+        public List<EmployerImage>? ImageUrls { get; set; }
         //public IdentityUser User { get; set; }
         //public JobFinder()
         //{

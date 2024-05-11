@@ -28,5 +28,7 @@ namespace DACS_Web_Viec_Lam.Models
 
         public string contactPhone { get; set; }
         public string? userId { get; set; }
+        public string? ImageUrl { get; set; } // Đường dẫn đến hình ảnh đại diện
+        public List<EmployerImage>? ImageUrls { get; set; }
     }
 }

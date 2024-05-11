@@ -61,6 +61,7 @@
                             <a href="@Url.Action("JobDetail","Employer", new { area = ""})" class="dropdown-item">Chi tiết</a>
                         </div>
                     </div>
+
                     @if (!User.Identity.IsAuthenticated)
                     {
                         <div class="nav-item dropdown">
@@ -70,6 +71,7 @@
                                 <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                                 <a href="404.html" class="dropdown-item">404</a>
                             </div>
+
                         </div>
                     }
 
