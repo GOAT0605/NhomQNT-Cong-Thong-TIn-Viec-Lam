@@ -1,5 +1,6 @@
 ﻿using DACS_Web_Viec_Lam.Data.Entities;
 using DACS_Web_Viec_Lam.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,10 @@ namespace DACS_Web_Viec_Lam.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+
         }
+        
+
 
         public DbSet<Employer> Employers { get; set; }
         public DbSet<Job> Job { get; set; }

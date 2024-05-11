@@ -37,12 +37,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.userId)
             </th>
-            <th></th>
+            <th>avatar</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.userId)
+                </th>
             <td>
                 @Html.DisplayFor(modelItem => item.FullName)
             </td>
@@ -59,15 +62,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Experiences)
             </td>
-                <th>
-                    @Html.DisplayFor(modelItem => item.userId)
-                </th>
+              
             <td>
                 @Html.DisplayFor(modelItem => item.Educations)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.userId)
-            </td>
+         
+                <td>
+                    <img src="@item.ImageUrl " alt="JobSeeker Image" style="width:300px; height: auto;" />
+                </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.JobSeekerId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.JobSeekerId">Details</a> |

@@ -27,8 +27,11 @@
     <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Areas\Company\Data\" />
     <Folder Include="Areas\Company\Models\" />
+    <Folder Include="Areas\Employee\Data\" />
+    <Folder Include="Areas\Employee\Models\" />
     <Folder Include="Areas\JobSeeker\Data\" />
     <Folder Include="Areas\JobSeeker\Models\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>
