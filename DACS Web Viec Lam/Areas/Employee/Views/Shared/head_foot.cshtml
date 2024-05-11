@@ -61,7 +61,6 @@
                             <a href="@Url.Action("JobDetail","Employer", new { area = ""})" class="dropdown-item">Chi tiết</a>
                         </div>
                     </div>
-
                     @if (!User.Identity.IsAuthenticated)
                     {
                         <div class="nav-item dropdown">
@@ -71,7 +70,6 @@
                                 <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                                 <a href="404.html" class="dropdown-item">404</a>
                             </div>
-
                         </div>
                     }
 
@@ -115,8 +113,8 @@
                     if (User.IsInRole("Company"))
                     {
                         <a href="@Url.Action("Add","Job", new { area = "Company" } )" class="nav-item nav-link text-dark">Đăng Công Việc</a>
-                        <a href="@Url.Action("Display","Company", new { area = "Company" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Công Ty<i class=""></i></a>
-
+                        <a href="@Url.Action("Index","Company", new { area = "Company" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">CV<i class=""></i></a>
+                
                     }
                     else
                     {
