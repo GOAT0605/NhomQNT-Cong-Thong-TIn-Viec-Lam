@@ -42,10 +42,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.contactPhone)
         </dd>
-
+        <dd class="col-sm-10">
+            <th>Logo</th> <img src="@Model.ImageUrl " alt="Employer Image" style="width:300px; height: auto;" />
+        </dd>
 
     </dl>
-    <div>
+    @* <div>
 
         @if (Model.ImageUrls != null)
         {
@@ -54,9 +56,9 @@
                 <img src="@imageUrl" alt="Product Image" style="width:300px; height: auto;" />
             }
         }
-    </div>
+    </div> *@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.EmployerId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+  @*   <a asp-action="Index">Back to List</a> *@
 </div>

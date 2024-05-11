@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class _1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,7 +90,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     CompanyDiscription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     contactMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     contactPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -109,7 +110,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Experiences = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Educations = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -269,6 +271,32 @@ namespace DACS_Web_Viec_Lam.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmployerImage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmployerId = table.Column<int>(type: "int", nullable: false),
+                    JobSeekerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployerImage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployerImage_Employers_EmployerId",
+                        column: x => x.EmployerId,
+                        principalTable: "Employers",
+                        principalColumn: "EmployerId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployerImage_JobSeeker_JobSeekerId",
+                        column: x => x.JobSeekerId,
+                        principalTable: "JobSeeker",
+                        principalColumn: "JobSeekerId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Job",
                 columns: table => new
                 {
@@ -351,6 +379,16 @@ namespace DACS_Web_Viec_Lam.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmployerImage_EmployerId",
+                table: "EmployerImage",
+                column: "EmployerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployerImage_JobSeekerId",
+                table: "EmployerImage",
+                column: "JobSeekerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Job_EmployerId",
                 table: "Job",
                 column: "EmployerId");
@@ -394,6 +432,9 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             migrationBuilder.DropTable(
                 name: "Educations");
+
+            migrationBuilder.DropTable(
+                name: "EmployerImage");
 
             migrationBuilder.DropTable(
                 name: "Job");
