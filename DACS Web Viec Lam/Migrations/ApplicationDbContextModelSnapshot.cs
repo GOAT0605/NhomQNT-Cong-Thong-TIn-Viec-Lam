@@ -195,9 +195,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Property<int>("EmployerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("EmployerId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int?>("JobSeekerId")
                         .HasColumnType("int");
 
@@ -207,7 +204,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployerId1");
+                    b.HasIndex("EmployerId");
 
                     b.HasIndex("JobSeekerId");
 
@@ -514,12 +511,13 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.EmployerImage", b =>
                 {
                     b.HasOne("DACS_Web_Viec_Lam.Models.Employer", "Employer")
                         .WithMany("ImageUrls")
-                        .HasForeignKey("EmployerId1");
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
                         .WithMany("ImageUrls")
