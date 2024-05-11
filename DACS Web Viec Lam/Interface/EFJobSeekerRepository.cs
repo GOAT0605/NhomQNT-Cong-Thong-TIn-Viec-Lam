@@ -18,7 +18,7 @@ namespace DACS_Web_Viec_Lam.Interface
             return await _context.JobSeeker.ToListAsync();
         }
 
-        public async Task<JobSeeker> GetByIdAsync(int id)
+        public async Task<JobSeeker> GetByIdAsync(string id)
         {
             return await _context.JobSeeker.FindAsync(id);
         }

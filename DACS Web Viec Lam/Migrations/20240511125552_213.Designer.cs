@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240505140217_123")]
-    partial class _123
+    [Migration("20240511125552_213")]
+    partial class _213
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,6 +203,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Property<string>("EmployerId1")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("JobSeekerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -210,6 +213,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployerId1");
+
+                    b.HasIndex("JobSeekerId");
 
                     b.ToTable("EmployerImage");
                 });
@@ -235,7 +240,7 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Property<string>("JobSeekerId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("JobSeekerId1")
+                    b.Property<int?>("JobSeekerId1")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
@@ -302,6 +307,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired()
                         .HasMaxLength(130)
                         .HasColumnType("nvarchar(130)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -380,6 +388,11 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -431,6 +444,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -514,6 +531,23 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Age")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
             modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Title", b =>
                 {
                     b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Category", "Category")
@@ -531,7 +565,13 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .WithMany("ImageUrls")
                         .HasForeignKey("EmployerId1");
 
+                    b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
+                        .WithMany("ImageUrls")
+                        .HasForeignKey("JobSeekerId");
+
                     b.Navigation("Employer");
+
+                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Job", b =>
@@ -542,9 +582,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
                         .WithMany()
-                        .HasForeignKey("JobSeekerId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobSeekerId1");
 
                     b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Time", null)
                         .WithMany("Jobs")
@@ -628,6 +666,11 @@ namespace DACS_Web_Viec_Lam.Migrations
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Employer", b =>
+                {
+                    b.Navigation("ImageUrls");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.JobSeeker", b =>
                 {
                     b.Navigation("ImageUrls");
                 });

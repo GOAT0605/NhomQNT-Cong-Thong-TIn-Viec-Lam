@@ -33,7 +33,7 @@ namespace DACS_Web_Viec_Lam.Models
         public string? EmployerId { get; set; }
 
         public Employer Employer { get; set; }
-        public JobSeeker JobSeeker { get; set; }
+        public JobSeeker? JobSeeker { get; set; }
 
         public string? JobSeekerId { get; set; }
     }

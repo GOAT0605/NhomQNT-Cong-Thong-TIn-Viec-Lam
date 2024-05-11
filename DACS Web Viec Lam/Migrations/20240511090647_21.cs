@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class _123 : Migration
+    public partial class _21 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Age = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -109,7 +112,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Experiences = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Educations = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -283,7 +287,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmployerId = table.Column<int>(type: "int", nullable: false),
-                    EmployerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    EmployerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    JobSeekerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -293,6 +298,11 @@ namespace DACS_Web_Viec_Lam.Migrations
                         column: x => x.EmployerId1,
                         principalTable: "Employers",
                         principalColumn: "EmployerId");
+                    table.ForeignKey(
+                        name: "FK_EmployerImage_JobSeeker_JobSeekerId",
+                        column: x => x.JobSeekerId,
+                        principalTable: "JobSeeker",
+                        principalColumn: "JobSeekerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -309,7 +319,7 @@ namespace DACS_Web_Viec_Lam.Migrations
                     Requirement = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationDeadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EmployerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    JobSeekerId1 = table.Column<int>(type: "int", nullable: false),
+                    JobSeekerId1 = table.Column<int>(type: "int", nullable: true),
                     JobSeekerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -325,8 +335,7 @@ namespace DACS_Web_Viec_Lam.Migrations
                         name: "FK_Job_JobSeeker_JobSeekerId1",
                         column: x => x.JobSeekerId1,
                         principalTable: "JobSeeker",
-                        principalColumn: "JobSeekerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "JobSeekerId");
                     table.ForeignKey(
                         name: "FK_Job_Times_TimeId",
                         column: x => x.TimeId,
@@ -383,6 +392,11 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "IX_EmployerImage_EmployerId1",
                 table: "EmployerImage",
                 column: "EmployerId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployerImage_JobSeekerId",
+                table: "EmployerImage",
+                column: "JobSeekerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Job_EmployerId",

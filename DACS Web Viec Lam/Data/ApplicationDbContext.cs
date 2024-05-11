@@ -20,6 +20,6 @@ namespace DACS_Web_Viec_Lam.Data
         public DbSet<UserRole> Roles { get; set; }
         public DbSet<Time> Times { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<ApplicationUser> users { get; set; }
     }
 }
