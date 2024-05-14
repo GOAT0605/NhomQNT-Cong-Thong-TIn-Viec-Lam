@@ -56,26 +56,28 @@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle mr-3 text-blue">
+                            <a class=" nav-item nav-link active">
                                 Manager
                             </a>
-                            <ul class="dropdown-menu">                                
+                            <ul class="dropdown-menu">
+
                                 <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a></li>
                                 <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Admin" asp-controller="JobSeeker" asp-action="Index">JobSeeker</a></li>
                             </ul>
                         </li>
                     }
+
                     <div class="nav-item dropdown">
+                      
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Công việc</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a href="@Url.Action("JobList","Employer", new { area = ""})" class="dropdown-item">Danh sách</a>
-                            <a href="@Url.Action("JobDetail","Employer", new { area = ""})" class="dropdown-item">Chi tiết</a>
+                          
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
+                    <div class="nav-item dropdown">                       
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a href="@Url.Action("Category","Employer", new { area = ""})" class="dropdown-item">Loại công việc</a>
+                          
                             <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                             <a href="404.html" class="dropdown-item">404</a>
                         </div>

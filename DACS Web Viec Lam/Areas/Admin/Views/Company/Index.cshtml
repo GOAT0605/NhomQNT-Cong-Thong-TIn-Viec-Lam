@@ -3,7 +3,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/head_foot.cshtml";
 }
-<h1>JobSeeker</h1>
+<h2>Employees</h2>
 @using (Html.BeginForm())
 {
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
@@ -19,11 +19,6 @@
             </div>
         </div>
     </nav>
-}@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["Message"]
-    </div>
 }
 <table class="table">
     <thead>
@@ -31,9 +26,7 @@
             <th>FullName</th>
             <th>Username</th>
             <th>Email</th>
-            <th>Address</th>
             <th>Actions</th>
-            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -43,13 +36,11 @@
                 <td>@user.FullName</td>
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
-                <td>@user.Address</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Edit</button></a>
-
+         @*            <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Edit</button></a> *@
                     <form asp-action="LockAccount" method="post" style="display: inline;">
                         <input type="hidden" name="id" value="@user.Id" />
-                        <input class="btn btn-danger" type="submit" value="Block" />
+                        <input class="btn btn-danger" type="submit" value="Lock" />
                     </form>
                     <form asp-action="UnlockAccount" method="post" style="display: inline;">
                         <input type="hidden" name="id" value="@user.Id" />
@@ -59,16 +50,15 @@
                 <td>
                     @if (user.LockoutEnd != DateTimeOffset.MaxValue)
                     {
-                        <span class="text-success">Unblock</span>
+                        <span class="text-success"> chưa block </span>
                     }
                     else
                     {
-                        <span class="text-danger">Blocked</span>
+                        <span class="text-danger"> Đã block </span>
 
                     }
                 </td>
             </tr>
-
         }
     </tbody>
 </table>

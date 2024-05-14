@@ -96,28 +96,28 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
         }
 
         // Hiển thị form cập nhật sản phẩm
-        public async Task<IActionResult> Update(string id)
-        {
-            var JobSeeker = await _JobSeekerRepository.GetByIdAsync(id);
-            if (JobSeeker == null)
-            {
-                return NotFound();
-            }
-            return View(JobSeeker);
-        }
+        //public async Task<IActionResult> Update(string id)
+        //{
+        //    var JobSeeker = await _JobSeekerRepository.GetByIdAsync(id);
+        //    if (JobSeeker == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(JobSeeker);
+        //}
 
-        // Xử lý cập nhật sản phẩm
-        [HttpPost]
-        public async Task<IActionResult> Update(string id, Models.JobSeeker JobSeeker)
-        {
+        //// Xử lý cập nhật sản phẩm
+        //[HttpPost]
+        //public async Task<IActionResult> Update(string id, Models.JobSeeker JobSeeker)
+        //{
 
 
-            if (ModelState.IsValid)
-            {
-                await _JobSeekerRepository.UpdateAsync(JobSeeker);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(JobSeeker);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        await _JobSeekerRepository.UpdateAsync(JobSeeker);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(JobSeeker);
+        //}
     }
 }

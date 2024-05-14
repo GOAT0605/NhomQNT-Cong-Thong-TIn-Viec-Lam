@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
+using Microsoft.EntityFrameworkCore;
 namespace DACS_Web_Viec_Lam.Controllers
 {
     [Area("Admin")]
@@ -23,48 +24,45 @@ namespace DACS_Web_Viec_Lam.Controllers
 
         public async Task<IActionResult> Index(string searchString)
         {
-            var jobseeker = await _userManager.GetUsersInRoleAsync("JobSeeker");
-            var jobseekerIds = jobseeker.Select(x => x.Id).ToList();
-            var alljobseeker = from s in _context.JobSeeker where jobseekerIds.Contains(s.userId) select s;
+            var jobseekers = await _userManager.GetUsersInRoleAsync("JobSeeker");
+            var jobseekerIds = jobseekers.Select(u => u.Id).ToList();
+            var alljobseeker = from s in _context.Users 
+                               where jobseekerIds.Contains(s.Id) select s;
             if (!string.IsNullOrEmpty(searchString))
             {
                 string lowercaseSearchString = searchString.ToLower();
                 alljobseeker = alljobseeker.Where(s => s.FullName.ToLower().Contains(lowercaseSearchString));
             }
-            return View();
+            return View(await alljobseeker.ToListAsync());
         }
         public async Task<IActionResult> Edit(string id)
         {
-            var jobseeker = await _jobseekerRepository.GetByIdAsync(id);
-            if (jobseeker == null)
+            var jobseekers = await _jobseekerRepository.GetByIdAsync(id);
+            if (jobseekers == null)
             {
                 return NotFound();
             }
-            return View(jobseeker);
+            return View(jobseekers);
         }
 
         // POST: Updates 
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, ApplicationUser jobseeker)
+        public async Task<IActionResult> Edit(string id, ApplicationUser jobseekers)
         {
-            if (id != jobseeker.Id)
+            if (id != jobseekers.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
-                var existingjobseeker = await _jobseekerRepository.GetByIdAsync(id); // Giả định có phương thức GetByIdAsync
-
-                existingjobseeker.FullName = jobseeker.FullName;
-
-                existingjobseeker.Email = jobseeker.Email;
-
-                await _jobseekerRepository.UpdateAsync(existingjobseeker);
-
+                var existingJobseeker = await _jobseekerRepository.GetByIdAsync(id);// Giả định có phương thức GetByIdAsync
+                existingJobseeker.FullName = jobseekers.FullName;
+                existingJobseeker.UserName = jobseekers.UserName;
+                existingJobseeker.Email = jobseekers.Email;
+                await _jobseekerRepository.UpdateAsync(existingJobseeker);
                 return RedirectToAction(nameof(Index));
-            }
-            return View(jobseeker);
+
+            }return View(jobseekers);
         }
         public async Task<IActionResult> LockAccount(string id)
         {

@@ -10,13 +10,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
  .AddDefaultTokenProviders()
  .AddDefaultUI()
  .AddEntityFrameworkStores<ApplicationDbContext>();
 //thong bao loi quyen truy cap
 
-        
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Thi?t l?p Lockout.
