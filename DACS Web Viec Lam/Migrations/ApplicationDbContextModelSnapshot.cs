@@ -305,7 +305,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("JobSeekerId")
-
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
@@ -547,9 +546,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
                         .WithMany()
-
                         .HasForeignKey("JobSeekerId");
-
 
                     b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Time", null)
                         .WithMany("Jobs")
