@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>JobEntry - Job Portal Website Template</title>
+    <title>QNT-Cổng Thông Tin Việc Làm</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -45,7 +45,7 @@
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="@Url.Action("Index","Employer", new { area = ""})" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-                <h1 class="m-0 text-primary">JobEntry</h1>
+                <h1 class="m-0 text-primary">QNT</h1>
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -81,9 +81,7 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu rounded-0 m-0">
-                                <a href="@Url.Action("Category","Employer", new { area = ""})" class="dropdown-item">Loại công việc</a>
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="404.html" class="dropdown-item">404</a>
+                                <a href="@Url.Action("Category","Employer", new { area = ""})" class="dropdown-item">Ngành nghề</a>
                             </div>
 
                         </div>
@@ -133,6 +131,7 @@
 
                     }
                     else
+                     @if (!User.Identity.IsAuthenticated || (!User.IsInRole("Admin") && !User.IsInRole("JobSeeker")))
                     {
                         <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Đăng công việc<i class="fa fa-arrow-right ms-3"></i></a>
                     }
