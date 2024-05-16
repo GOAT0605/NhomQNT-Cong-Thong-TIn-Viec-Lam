@@ -61,19 +61,36 @@
                             <a href="@Url.Action("JobDetail","Employer")" class="dropdown-item">Chi tiết</a>
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="@Url.Action("Category","Employer")" class="dropdown-item">Loại công việc</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404</a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu rounded-0 m-0">
+                                <a href="@Url.Action("Category","Employer", new { area = ""})" class="dropdown-item">Loại công việc</a>
+                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                <a href="404.html" class="dropdown-item">404</a>
+                            </div>
                         </div>
-                    </div>
-                    @* <a href="@Url.Action("Category","Employer")" class="nav-item nav-link">Đăng nhập</a>
-                    <a href="about.html" class="nav-item nav-link">Đăng ký</a> *@
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Company"))
+                        {
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Quản Lý Công Việc</a>
+                                <div class="dropdown-menu rounded-0 m-0">
+                                    <a href="@Url.Action("Category","Employer", new { area = ""})" class="dropdown-item">Loại công việc</a>
+                                    <a href="@Url.Action("Index","Job", new { area = "Company"})" class="dropdown-item">Danh Sách công việc</a>
+                                    <a href="404.html" class="dropdown-item">404</a>
+                                </div>
+                            </div>
+                        }
+                    }
+                   
                     <partial name="_LoginPartial" />
                 </div>
-               @*  <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Đăng công việc<i class="fa fa-arrow-right ms-3"></i></a> *@
+             
                 @if (User.Identity.IsAuthenticated)
                 {
                     @*     if (User.IsInRole("Admin"))
@@ -86,12 +103,13 @@
                 } *@
                     if (User.IsInRole("Company"))
                     {
-                        <a href="@Url.Action("Index","Company", new { area = "Company" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">CV<i class=""></i></a>
+                        <a href="@Url.Action("Add","Job", new { area = "Company" } )" class="nav-item nav-link text-dark">Đăng Công Việc</a>
+                        <a href="@Url.Action("Display","Company", new { area = "Company" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Công Ty<i class=""></i></a>
+
                         @*  <a href="@Url.Action("Index","JobSeeker", new { area = "JobSeeker" } )" class="nav-item nav-link active">Trang chủ</a> *@
                         @*   <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="JobSeeker" asp-controller="JobSeeker" asp-action="Index">CV</a>
                 </li> *@
-
 
                     }
                     else

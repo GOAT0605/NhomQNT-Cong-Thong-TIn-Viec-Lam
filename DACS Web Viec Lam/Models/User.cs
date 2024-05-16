@@ -4,7 +4,7 @@ namespace DACS_Web_Viec_Lam.Models
 {
     public class User
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required, StringLength(130)]
         public string Name { get; set; }

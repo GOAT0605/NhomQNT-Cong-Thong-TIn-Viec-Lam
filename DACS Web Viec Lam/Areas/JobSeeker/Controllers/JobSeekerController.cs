@@ -18,11 +18,13 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly IJobSeekerRepository _JobSeekerRepository;
+ 
 
         public JobSeekerController(IJobSeekerRepository JobSeekerRepository, ApplicationDbContext context)
         {
             _JobSeekerRepository = JobSeekerRepository;
             _context = context;
+
         }
 
         public async Task<IActionResult> Index()

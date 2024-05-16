@@ -57,7 +57,7 @@ List<IFormFile> imageUrls)
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Employer.userId = userId; // Set userId before adding to the repository
                 await _EmployerRepository.AddAsync(Employer);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Display));
             }
             return View(Employer);
         }

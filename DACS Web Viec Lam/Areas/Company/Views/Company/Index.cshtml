@@ -28,9 +28,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.contactPhone)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.userId)
-            </th>
+         
             <th>Logo</th>
         </tr>
     </thead>
@@ -52,16 +50,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.contactPhone)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.userId)
-                </td>
+       
                 <td>
                     <img src="@item.ImageUrl " alt="Employer Image" style="width:300px; height: auto;" />
                 </td>
                 
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EmployerId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmployerId">Details</a> |
+                <a asp-action="Display" asp-route-id="@item.EmployerId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.EmployerId">Delete</a>
             </td>
         </tr>
