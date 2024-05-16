@@ -35,9 +35,9 @@ namespace DACS_Web_Viec_Lam.Interface
             await _userManager.UpdateAsync(jobseeker);
             await _context.SaveChangesAsync();
         }
-        public async Task AddAsync(JobSeeker product)
+        public async Task AddAsync(JobSeeker jobSeeker)
         {
-            _context.JobSeeker.Add(product);
+            _context.JobSeeker.Add(jobSeeker);
             await _context.SaveChangesAsync();
         }
 

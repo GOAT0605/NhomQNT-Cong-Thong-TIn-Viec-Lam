@@ -58,6 +58,7 @@ namespace DACS_Web_Viec_Lam.Controllers
                 var existingJobseeker = await _jobseekerRepository.GetByIdAsync(id);// Giả định có phương thức GetByIdAsync
                 existingJobseeker.FullName = jobseekers.FullName;
                 existingJobseeker.UserName = jobseekers.UserName;
+               // existingJobseeker.PasswordHash = jobseekers.PasswordHash;
                 existingJobseeker.Email = jobseekers.Email;
                 await _jobseekerRepository.UpdateAsync(existingJobseeker);
                 return RedirectToAction(nameof(Index));
