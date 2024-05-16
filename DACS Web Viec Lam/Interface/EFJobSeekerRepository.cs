@@ -1,38 +1,54 @@
 ﻿using DACS_Web_Viec_Lam.Data;
 using DACS_Web_Viec_Lam.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DACS_Web_Viec_Lam.Interface
 {
     public class EFJobSeekerRepository:IJobSeekerRepository
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public EFJobSeekerRepository(ApplicationDbContext context)
+        public EFJobSeekerRepository(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
 
-        public async Task<IEnumerable<JobSeeker>> GetAllAsync()
+        public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
         {
-            return await _context.JobSeeker.ToListAsync();
+            var jobseeker = await _userManager.GetUsersInRoleAsync("JobSeeker");
+            return jobseeker;
         }
 
-        public async Task<JobSeeker> GetByIdAsync(int id)
+        public async Task<ApplicationUser> GetByIdAsync(string userId)
         {
-            return await _context.JobSeeker.FindAsync(id);
+            // Find a user by their ID
+            var user = await _userManager.FindByIdAsync(userId);
+            return user;
         }
 
-        public async Task AddAsync(JobSeeker product)
+        public async Task UpdateAsync(ApplicationUser jobseeker)
         {
-            _context.JobSeeker.Add(product);
+            // Update a user
+            await _userManager.UpdateAsync(jobseeker);
+            await _context.SaveChangesAsync();
+        }
+        public async Task AddAsync(JobSeeker jobSeeker)
+        {
+            _context.JobSeeker.Add(jobSeeker);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(JobSeeker product)
+        public async Task DeleteAsync(string userId)
         {
-            _context.JobSeeker.Update(product);
-            await _context.SaveChangesAsync();
+            // Delete a user by their ID
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
         }
     }
 }

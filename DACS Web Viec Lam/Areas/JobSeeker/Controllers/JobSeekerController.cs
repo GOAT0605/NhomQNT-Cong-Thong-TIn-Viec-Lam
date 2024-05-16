@@ -97,8 +97,8 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
             return View(jobSeeker);
         }
 
-        // Hiển thị form cập nhật sản phẩm
-        public async Task<IActionResult> Update(int id)
+       // Hiển thị form cập nhật sản phẩm
+        public async Task<IActionResult> Update(string id)
         {
             var JobSeeker = await _JobSeekerRepository.GetByIdAsync(id);
             if (JobSeeker == null)
@@ -110,7 +110,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 
         // Xử lý cập nhật sản phẩm
         [HttpPost]
-        public async Task<IActionResult> Update(int id, Models.JobSeeker JobSeeker)
+        public async Task<IActionResult> Update(string id, ApplicationUser JobSeeker)
         {
 
 

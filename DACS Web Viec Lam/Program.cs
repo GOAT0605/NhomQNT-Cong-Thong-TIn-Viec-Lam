@@ -1,5 +1,6 @@
 using DACS_Web_Viec_Lam.Data;
 using DACS_Web_Viec_Lam.Interface;
+using DACS_Web_Viec_Lam.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); 
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
  .AddDefaultTokenProviders()
  .AddDefaultUI()
  .AddEntityFrameworkStores<ApplicationDbContext>();
 //thong bao loi quyen truy cap
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Thi?t l?p Lockout.
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 3;
+    options.Lockout.AllowedForNewUsers = true;
+});
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
