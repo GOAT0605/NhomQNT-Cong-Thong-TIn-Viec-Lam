@@ -1,15 +1,19 @@
 ﻿using DACS_Web_Viec_Lam.Data.Entities;
 using DACS_Web_Viec_Lam.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DACS_Web_Viec_Lam.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+
         }
+        
+
 
         public DbSet<Employer> Employers { get; set; }
         public DbSet<Job> Job { get; set; }
@@ -20,6 +24,6 @@ namespace DACS_Web_Viec_Lam.Data
         public DbSet<UserRole> Roles { get; set; }
         public DbSet<Time> Times { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<ApplicationUser> users { get; set; }
     }
 }

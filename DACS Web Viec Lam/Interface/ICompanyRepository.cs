@@ -8,5 +8,7 @@ namespace DACS_Web_Viec_Lam.Interface
         Task<Employer> GetByIdAsync(int id);
         Task AddAsync(Employer product);
         Task UpdateAsync(Employer product);
+
+        
     }
 }

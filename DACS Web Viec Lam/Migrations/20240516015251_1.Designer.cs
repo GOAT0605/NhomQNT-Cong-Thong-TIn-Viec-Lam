@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240502125601_test2")]
-    partial class test2
+    [Migration("20240516015251_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,9 +87,6 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<bool?>("Disable")
                         .HasColumnType("bit");
 
@@ -106,8 +103,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Titles");
                 });
@@ -136,6 +131,81 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Age")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Education", b =>
                 {
                     b.Property<int>("EducationId")
@@ -155,8 +225,11 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Employer", b =>
                 {
-                    b.Property<string>("EmployerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("EmployerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployerId"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -170,6 +243,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .HasMaxLength(130)
                         .HasColumnType("nvarchar(130)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("contactMail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -178,9 +254,39 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("EmployerId");
 
                     b.ToTable("Employers");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.EmployerImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JobSeekerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployerId");
+
+                    b.HasIndex("JobSeekerId");
+
+                    b.ToTable("EmployerImage");
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Job", b =>
@@ -198,13 +304,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmployerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("EmployerId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("JobSeekerId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("JobSeekerId1")
+                    b.Property<int?>("JobSeekerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Location")
@@ -233,7 +336,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasIndex("EmployerId");
 
-                    b.HasIndex("JobSeekerId1");
+                    b.HasIndex("JobSeekerId");
 
                     b.HasIndex("TimeId");
 
@@ -271,6 +374,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired()
                         .HasMaxLength(130)
                         .HasColumnType("nvarchar(130)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -335,71 +441,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -483,15 +524,21 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Title", b =>
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.EmployerImage", b =>
                 {
-                    b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Category", "Category")
-                        .WithMany("Titles")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("DACS_Web_Viec_Lam.Models.Employer", "Employer")
+                        .WithMany("ImageUrls")
+                        .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
+                        .WithMany("ImageUrls")
+                        .HasForeignKey("JobSeekerId");
+
+                    b.Navigation("Employer");
+
+                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Job", b =>
@@ -502,9 +549,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
                         .WithMany()
-                        .HasForeignKey("JobSeekerId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobSeekerId");
 
                     b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Time", null)
                         .WithMany("Jobs")
@@ -532,7 +577,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("DACS_Web_Viec_Lam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -541,7 +586,7 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("DACS_Web_Viec_Lam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -556,7 +601,7 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("DACS_Web_Viec_Lam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -565,16 +610,11 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("DACS_Web_Viec_Lam.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Category", b =>
-                {
-                    b.Navigation("Titles");
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Time", b =>
@@ -585,6 +625,16 @@ namespace DACS_Web_Viec_Lam.Migrations
             modelBuilder.Entity("DACS_Web_Viec_Lam.Data.Entities.Title", b =>
                 {
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Employer", b =>
+                {
+                    b.Navigation("ImageUrls");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.JobSeeker", b =>
+                {
+                    b.Navigation("ImageUrls");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,11 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DACS_Web_Viec_Lam.Models
 {
     public class Employer
     {
-        public string EmployerId { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
+        public int EmployerId { get; set; }
+        //public Employer()
+        //{
+        //    EmployerId = GenerateRandomId();
+        //}
+        //private int GenerateRandomId()
+        //{
+        //    // Generate a random integer using a random number generator
+        //    Random rand = new Random();
+        //    return rand.Next(100000, 999999); // Adjust the range as needed
+        //}
         [Required, StringLength(130)]
+       
         public string CompanyName { get; set; }
         public string Address { get; set; }
         public string? CompanyDiscription { get; set; }
@@ -13,5 +28,7 @@ namespace DACS_Web_Viec_Lam.Models
 
         public string contactPhone { get; set; }
         public string? userId { get; set; }
+        public string? ImageUrl { get; set; } // Đường dẫn đến hình ảnh đại diện
+        public List<EmployerImage>? ImageUrls { get; set; }
     }
 }
