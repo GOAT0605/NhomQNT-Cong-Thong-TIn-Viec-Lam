@@ -34,9 +34,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Employer)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.JobSeekerId)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -64,9 +64,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Employer.EmployerId)
             </td>
-            <td>
+          @*   <td>
                 @Html.DisplayFor(modelItem => item.JobSeekerId)
-            </td>
+            </td> *@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.JobId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.JobId">Details</a> |
