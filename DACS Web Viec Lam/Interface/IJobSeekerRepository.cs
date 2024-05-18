@@ -10,4 +10,12 @@ namespace DACS_Web_Viec_Lam.Interface
         Task DeleteAsync(string userId);
         Task AddAsync(JobSeeker product);
     }
+    public interface IJobSeeker1Repository
+    {
+        Task<IEnumerable<JobSeeker>> GetAllAsync();
+        Task<ApplicationUser> GetByIdAsync(string userId);
+        Task UpdateAsync(ApplicationUser jobseeker);
+        Task DeleteAsync(string userId);
+        Task AddAsync(JobSeeker product);
+    }
 }

@@ -12,21 +12,22 @@ using System.Security.Claims;
 namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 {
     [Area("JobSeeker")]
-    [Authorize(Roles = SD.Role_JobSeeker)]
+    [Authorize(Roles = SD.Role_JobSeeker + "," + SD.Role_Admin)]
     public class JobSeekerController : Controller
     {
 
         private readonly ApplicationDbContext _context;
-        private readonly IJobSeekerRepository _JobSeekerRepository;
+        private readonly IJobSeeker1Repository _JobSeekerRepository;
  
 
-        public JobSeekerController(IJobSeekerRepository JobSeekerRepository, ApplicationDbContext context)
+        public JobSeekerController(IJobSeeker1Repository JobSeekerRepository, ApplicationDbContext context)
         {
             _JobSeekerRepository = JobSeekerRepository;
             _context = context;
 
         }
-
+        [Area("JobSeeker")]
+        [Authorize(Roles =  SD.Role_Admin)]
         public async Task<IActionResult> Index()
         {
             var JobSeekers = await _JobSeekerRepository.GetAllAsync();
@@ -63,7 +64,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 JobSeeker.userId = userId; // Set userId before adding to the repository
                 await _JobSeekerRepository.AddAsync(JobSeeker);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Display));
             }
             return View(JobSeeker);
         }
