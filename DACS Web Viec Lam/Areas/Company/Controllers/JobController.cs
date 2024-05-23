@@ -79,10 +79,10 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
     }
 
     // ModelState is not valid, return the Add view with validation errors
-    var titles = await _titleRepository.GetAllAsync();
-    ViewBag.TitleId = new SelectList(titles, "Id", "Name");
-    return View(job);
-}
+         var titles = await _titleRepository.GetAllAsync();
+          ViewBag.TitleId = new SelectList(titles, "Id", "Name");
+            return View(job);
+    }
 
 
         public async Task<IActionResult> Display(int id)

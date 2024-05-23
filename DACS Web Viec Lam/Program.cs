@@ -3,6 +3,7 @@ using DACS_Web_Viec_Lam.Interface;
 using DACS_Web_Viec_Lam.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -62,7 +63,13 @@ app.MapControllerRoute(
 
  name: "default",
  pattern: "{controller=Employer}/{action=Index}/{id?}");
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 //app.MapControllerRoute(
 //name: "Employer",
 //pattern: "{area:exists}/{controller=Employer}/{action=Index}/{id?}"
