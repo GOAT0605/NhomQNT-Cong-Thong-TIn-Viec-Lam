@@ -5,6 +5,7 @@
 }
 @model IEnumerable<DACS_Web_Viec_Lam.Models.CVViewModel>
 <h1>Danh Sách Ứng Viên</h1>
+<a href="@Url.Action("ExportToExcel","Apply", new { area = "" } )" class="btn btn-primary ">Xuất ra excel<i class=""></i></a>
 <table class="table">
     <thead>
         <tr>
@@ -20,7 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
             <th>avatar</th>
         </tr>
     </thead>
@@ -40,15 +43,18 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
-          
+                <th>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </th>
 
                 <td>
                     <img src="@item.ImageUrl " alt="JobSeeker Image" style="width:100px; height: 150px;" />
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.JobSeekerId">Edit</a> |
-                    <a asp-action="Display" asp-route-id="@item.JobSeekerId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.JobSeekerId">Delete</a>
+                    <a asp-action="Approve" asp-route-id="@item.ApplicationId">Approve</a> |
+                    <a asp-action="Disapprove" asp-route-id="@item.ApplicationId">Disapprove</a>|
+                    <a asp-action="Display" asp-route-id="@item.JobSeekerId">Details</a> 
+                 
                 </td>
             </tr>
         }

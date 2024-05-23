@@ -9,5 +9,7 @@ namespace DACS_Web_Viec_Lam.Interface
         Task UpdateAsync(ApplicationUser jobseeker);
         Task DeleteAsync(string userId);
         Task AddAsync(JobSeeker product);
+
+        Task<JobSeeker> GetByIdAsync(int id);
     }
 }

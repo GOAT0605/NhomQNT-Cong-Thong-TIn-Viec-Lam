@@ -15,7 +15,7 @@ namespace DACS_Web_Viec_Lam.Models
 
         [Required]
         public ApplicationStatus Status { get; set; } = ApplicationStatus.NotChecked;
-
+        public string? comment { get; set; }
         public int? JobSeekerId { get; set; }
         public JobSeeker? JobSeeker { get; set; }
 
