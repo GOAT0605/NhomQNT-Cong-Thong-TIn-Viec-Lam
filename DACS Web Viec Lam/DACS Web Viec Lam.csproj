@@ -33,4 +33,8 @@
     <Folder Include="Areas\JobSeeker\Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\Style.css" />
+  </ItemGroup>
+
 </Project>

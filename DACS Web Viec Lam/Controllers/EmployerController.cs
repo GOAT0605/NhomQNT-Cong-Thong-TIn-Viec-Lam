@@ -9,9 +9,11 @@ namespace DACS_Web_Viec_Lam.Controllers
 {
     public class EmployerController : Controller
     {
+
         private readonly IJobRepository _jobRepository;
         private readonly ApplicationDbContext _context;
         public EmployerController(IJobRepository jobRepository, ApplicationDbContext context)
+
         {
             _jobRepository = jobRepository;
             _context = context;
@@ -77,5 +79,21 @@ namespace DACS_Web_Viec_Lam.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> Search(string searchString)
+        {
+            // Lấy tất cả các employee từ context
+            var allRole = from s in _context.Job
+                              select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                string lowercaseSearchString = searchString.ToLower();
+                // Tìm kiếm theo title của job thay vì FullName của user
+                allRole = allRole.Where(s => s.Title.ToLower().Contains(lowercaseSearchString));
+            }
+
+            return View(await allRole.ToListAsync());
+        }
+
     }
 }

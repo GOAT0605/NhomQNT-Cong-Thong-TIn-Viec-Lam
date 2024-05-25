@@ -1,0 +1,101 @@
+﻿@model IEnumerable<DACS_Web_Viec_Lam.Models.Job>
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/head_foot.cshtml";
+}
+<!-- Search Start -->
+<div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
+    <div class="container">
+        <form method="get" asp-controller="" asp-action="Search">
+            <div class="row g-2">
+                <div class="col-md-10">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <input type="text" name="searchString" class="form-control border-0" placeholder="Tìm công việc mong muốn" aria-label="Search" name="searchString" />
+                        </div>
+                        <div class="col-md-4">
+                            @* <select name="category" class="form-select border-0">
+                            <option selected value="">Category</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Customer Service">Customer Service</option>
+                            <option value="Human Resource">Human Resource</option>
+                            <option value="Project Management">Project Management</option>
+                            </select> *@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark border-0 w-100">Tìm kiếm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Search End -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Salary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requirement)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationDeadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JobSeekerId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Salary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Requirement)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationDeadline)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employer.EmployerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobSeekerId)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.JobId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.JobId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.JobId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
