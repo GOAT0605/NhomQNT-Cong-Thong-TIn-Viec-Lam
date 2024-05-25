@@ -2,6 +2,7 @@
 using DACS_Web_Viec_Lam.Data.Entities;
 using DACS_Web_Viec_Lam.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DACS_Web_Viec_Lam.Interface
 {
@@ -33,5 +34,9 @@ namespace DACS_Web_Viec_Lam.Interface
             _context.Titles.Update(title);
             await _context.SaveChangesAsync();
         }
+
+
+
+       
     }
 }
