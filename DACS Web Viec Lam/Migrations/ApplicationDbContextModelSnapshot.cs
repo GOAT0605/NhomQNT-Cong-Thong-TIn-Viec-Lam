@@ -336,6 +336,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Property<int?>("EmployerId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDetactive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
