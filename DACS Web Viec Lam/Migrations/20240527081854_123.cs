@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class test1 : Migration
+    public partial class _123 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -313,6 +313,7 @@ namespace DACS_Web_Viec_Lam.Migrations
                     Requirement = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationDeadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EmployerId = table.Column<int>(type: "int", nullable: true),
+                    IsDetactive = table.Column<bool>(type: "bit", nullable: false),
                     TimeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -344,6 +345,7 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ApplicationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JobSeekerId = table.Column<int>(type: "int", nullable: true),
                     JobId = table.Column<int>(type: "int", nullable: true)
                 },
