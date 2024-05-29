@@ -9,5 +9,6 @@ namespace DACS_Web_Viec_Lam.Interface
         Task AddAsync(Job job);
         Task UpdateAsync(Job job);
         Task<IEnumerable<object>> GetByUserIdAsync(int employerId);
+
     }
 }

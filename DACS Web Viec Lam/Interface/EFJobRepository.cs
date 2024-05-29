@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DACS_Web_Viec_Lam.Interface
 {
-    public class EFJobRepository:IJobRepository
+    public class EFJobRepository : IJobRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -40,5 +40,8 @@ namespace DACS_Web_Viec_Lam.Interface
         {
             return await _context.Job.Where(j => j.EmployerId == employerId).ToListAsync();
         }
+
+       
     }
+ 
 }
