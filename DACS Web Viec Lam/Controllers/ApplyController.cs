@@ -17,10 +17,12 @@ namespace DACS_Web_Viec_Lam.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IJobSeekerRepository _JobSeekerRepository;
-        public ApplyController(ApplicationDbContext context, IJobSeekerRepository JobSeekerRepository)
+        private readonly INotificationRepository _notificationRepository;
+        public ApplyController(ApplicationDbContext context, IJobSeekerRepository JobSeekerRepository, INotificationRepository notificationRepository)
         {
             _context = context;
             _JobSeekerRepository = JobSeekerRepository;
+            _notificationRepository = notificationRepository;
         }
         public IActionResult Index()
         {
@@ -168,24 +170,31 @@ namespace DACS_Web_Viec_Lam.Controllers
 
             return View(cvViewModels);
         }
-        public async Task<IActionResult> Approve(int id)
-        {
-            if (id == 0)
+            public async Task<IActionResult> Approve(int id)
             {
-                return BadRequest("Invalid application id.");
-            }
+                if (id == 0)
+                {
+                    return BadRequest("Invalid application id.");
+                }
 
-            var apply = await _context.applicationLists.FindAsync(id);
-            if (apply == null)
-            {
-                return NotFound($"Application with id {id} not found.");
-            }
+                var apply = await _context.applicationLists.FindAsync(id);
+                if (apply == null)
+                {
+                    return NotFound($"Application with id {id} not found.");
+                }
 
-            apply.Status = ApplicationStatus.Applied;
-            _context.Update(apply);
-            await _context.SaveChangesAsync();
-
+                apply.Status = ApplicationStatus.Applied;
+                _context.Update(apply);
+                await _context.SaveChangesAsync();
+            var userId = apply.JobSeekerId;
+            var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
+            var message = $"Application with name {jobseeker.FullName} has been approved.";
+            await AddNotification((int)userId, message);
             return RedirectToAction("Apply");
+            }
+        public async Task AddNotification(int userId, string message)
+        {
+            _notificationRepository.AddNotification(userId, message);
         }
         public async Task<IActionResult> Disapprove(int id)
         {

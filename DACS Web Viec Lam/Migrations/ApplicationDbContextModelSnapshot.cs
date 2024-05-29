@@ -336,6 +336,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Property<int?>("EmployerId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDetactive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -413,6 +416,32 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.HasKey("JobSeekerId");
 
                     b.ToTable("JobSeeker");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.Notification", b =>
+                {
+                    b.Property<int>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NotificationId");
+
+                    b.ToTable("notifications");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

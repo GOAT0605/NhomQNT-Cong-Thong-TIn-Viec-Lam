@@ -1,0 +1,49 @@
+﻿@model IEnumerable<DACS_Web_Viec_Lam.Models.Notification>
+
+@{
+    ViewData["Title"] = "NotificationList";
+    Layout = "~/Views/Shared/head_foot.cshtml";
+}
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+           @*  <th>
+                @Html.DisplayNameFor(model => model.NotificationId)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+              @*   <th>
+                    @Html.DisplayFor(modelItem => item.NotificationId)
+                </th> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+					<form method="post" asp-action="MarkAsRead" asp-controller="Employer">
+						<input type="hidden" name="notificationId" value="@item.NotificationId" />
+						<button type="submit">Mark as Read</button>
+					</form>
+            </td>
+             
+
+        </tr>
+}
+    </tbody>
+</table>

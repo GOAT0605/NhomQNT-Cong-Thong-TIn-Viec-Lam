@@ -37,6 +37,8 @@ builder.Services.AddScoped<IJobSeeker1Repository, EFJobSeeker1Repository>();
 builder.Services.AddScoped<ICompanyRepository, EFCompanyRepository>();
 builder.Services.AddScoped<IJobRepository, EFJobRepository>();
 builder.Services.AddScoped<ITitleRepository, EFTitleRepository>();
+builder.Services.AddScoped<INotificationRepository, EFNotificationRepository>();
+
 builder.Services.AddRazorPages();
 var app = builder.Build();
 // Configure the HTTP request pipeline.

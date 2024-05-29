@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240521130159_update")]
-    partial class update
+    [Migration("20240527081854_123")]
+    partial class _123
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -338,6 +338,9 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     b.Property<int?>("EmployerId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDetactive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()
