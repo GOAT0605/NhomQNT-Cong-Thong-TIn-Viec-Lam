@@ -2,8 +2,10 @@
 using DACS_Web_Viec_Lam.Interface;
 using DACS_Web_Viec_Lam.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DACS_Web_Viec_Lam.Controllers
 {
@@ -76,6 +78,37 @@ namespace DACS_Web_Viec_Lam.Controllers
         public IActionResult Testimonial()
         {
             return View();
+        }
+        public IActionResult NotificationLIst()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Challenge(); 
+            }
+
+            var jobSeeker = _context.JobSeeker
+               .FirstOrDefault(j => j.userId == userId);
+            var notifications = _context.notifications
+                .Where(n => n.UserId == jobSeeker.JobSeekerId && !n.IsRead)
+                .OrderByDescending(n => n.CreatedDate)
+                .ToList();
+
+            return View(notifications);
+          
+        }
+        [HttpPost]
+        public async Task<IActionResult> MarkAsRead(int notificationId)
+        {
+            var notification = _context.notifications.FirstOrDefault(j => j.NotificationId == notificationId);
+
+            if (notification != null)
+            {
+                notification.IsRead = true;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("NotificationList"); 
         }
     }
 }

@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "MarkAsRead";
+    Layout = "~/Views/Shared/head_foot.cshtml";
+}
+
+<h2>Notification marked as read.</h2>
+@model DACS_Web_Viec_Lam.Models.Notification
+
+<form asp-action="ApproveApplication" method="post">
+ 
+    <input type="hidden" asp-for="NotificationId" />
+    <button type="submit" class="btn btn-success">Approve Application</button>
+</form>
