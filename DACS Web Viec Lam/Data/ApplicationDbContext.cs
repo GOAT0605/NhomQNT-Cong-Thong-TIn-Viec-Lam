@@ -27,5 +27,6 @@ namespace DACS_Web_Viec_Lam.Data
 
         public DbSet<ApplicationList> applicationLists { get; set; }
         public DbSet<ApplicationUser> users { get; set; }
+        public DbSet<Notification> notifications { get; set; }
     }
 }

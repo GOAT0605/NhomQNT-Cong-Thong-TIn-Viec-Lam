@@ -90,6 +90,16 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
+                        if (User.IsInRole("JobSeeker"))
+                        {
+                            <a href="@Url.Action("NotificationList", "Employer", new { area = "" })" class="nav-link">
+                                <i class="bi bi-bell-fill icon-large ms-2"></i>
+                            </a>
+
+
+                          
+
+                        }
                         if (User.IsInRole("Company"))
                         {
                             <div class="nav-item dropdown">
@@ -121,8 +131,9 @@
 
                     if (User.IsInRole("JobSeeker"))
                     {
+                   
                         <a href="@Url.Action("Display","JobSeeker", new { area = "JobSeeker" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">CV<i class=""></i></a>
-
+                        
                     }
 
                     if (User.IsInRole("Company"))
@@ -223,5 +234,7 @@
     <!-- Template Javascript -->
     <script src="~/template/js/main.js"></script>
 </body>
-
+    
 </html>
+
+
