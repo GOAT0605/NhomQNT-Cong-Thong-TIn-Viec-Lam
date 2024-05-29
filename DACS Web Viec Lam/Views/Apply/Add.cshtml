@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/head_foot.cshtml";
+}
+
+@model DACS_Web_Viec_Lam.Models.JobSeeker
+<h2>Apply for Job</h2>
+
+<form asp-action="Add" method="post">
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Experiences)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Experiences)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Educations)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Educations)
+        <dd class="col-sm-10">
+            <th>Avatar</th> <img src="@Model.ImageUrl " alt="Employer Image" style="width:300px; height: auto;" />
+        </dd>
+    </dl>
+    <!-- Add other form fields as necessary -->
+    <button type="submit" class="btn btn-primary">Submit Application</button>
+</form>

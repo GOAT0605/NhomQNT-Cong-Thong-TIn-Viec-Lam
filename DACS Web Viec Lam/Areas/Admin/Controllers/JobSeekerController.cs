@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 namespace DACS_Web_Viec_Lam.Controllers
 {
     [Area("Admin")]
@@ -22,7 +23,7 @@ namespace DACS_Web_Viec_Lam.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int? page)
         {
             var jobseekers = await _userManager.GetUsersInRoleAsync("JobSeeker");
             var jobseekerIds = jobseekers.Select(u => u.Id).ToList();
@@ -33,7 +34,13 @@ namespace DACS_Web_Viec_Lam.Controllers
                 string lowercaseSearchString = searchString.ToLower();
                 alljobseeker = alljobseeker.Where(s => s.FullName.ToLower().Contains(lowercaseSearchString));
             }
-            return View(await alljobseeker.ToListAsync());
+            if (page == null)
+            {
+                page = 1;
+            }
+            int pageSize = 2;
+            int pageNum = page ?? 1;
+            return View( alljobseeker.ToPagedList(pageNum, pageSize));
         }
         public async Task<IActionResult> Edit(string id)
         {

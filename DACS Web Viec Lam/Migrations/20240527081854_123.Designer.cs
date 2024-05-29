@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240516015251_1")]
-    partial class _1
+    [Migration("20240527081854_123")]
+    partial class _123
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,6 +129,38 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.ApplicationList", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<DateTime?>("ApplicationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JobSeekerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApplicationId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("JobSeekerId");
+
+                    b.ToTable("applicationLists");
                 });
 
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.ApplicationUser", b =>
@@ -307,8 +339,8 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Property<int?>("EmployerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("JobSeekerId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsDetactive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -335,8 +367,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.HasKey("JobId");
 
                     b.HasIndex("EmployerId");
-
-                    b.HasIndex("JobSeekerId");
 
                     b.HasIndex("TimeId");
 
@@ -524,6 +554,21 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DACS_Web_Viec_Lam.Models.ApplicationList", b =>
+                {
+                    b.HasOne("DACS_Web_Viec_Lam.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId");
+
+                    b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
+                        .WithMany()
+                        .HasForeignKey("JobSeekerId");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("JobSeeker");
+                });
+
             modelBuilder.Entity("DACS_Web_Viec_Lam.Models.EmployerImage", b =>
                 {
                     b.HasOne("DACS_Web_Viec_Lam.Models.Employer", "Employer")
@@ -547,10 +592,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .WithMany()
                         .HasForeignKey("EmployerId");
 
-                    b.HasOne("DACS_Web_Viec_Lam.Models.JobSeeker", "JobSeeker")
-                        .WithMany()
-                        .HasForeignKey("JobSeekerId");
-
                     b.HasOne("DACS_Web_Viec_Lam.Data.Entities.Time", null)
                         .WithMany("Jobs")
                         .HasForeignKey("TimeId");
@@ -562,8 +603,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         .IsRequired();
 
                     b.Navigation("Employer");
-
-                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

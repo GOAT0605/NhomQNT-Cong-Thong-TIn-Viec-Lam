@@ -62,6 +62,9 @@
                                 <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a></li>
                                 <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="Admin" asp-controller="JobSeeker" asp-action="Index">JobSeeker</a></li>
                                 <li class="nav-item"><a class="dropdown-item nav-link text-dark" asp-area="JobSeeker" asp-controller="JobSeeker" asp-action="Index">List CV</a></li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register Account</a>                                   
+                                </li>
                             </ul>
                         </li>
                     }
@@ -124,6 +127,7 @@
 
                     if (User.IsInRole("Company"))
                     {
+                        <a href="@Url.Action("Apply","Apply", new { area = "" } )" class="nav-item nav-link text-dark">Danh Sách Ứng Viên</a>
                         <a href="@Url.Action("Add","Job", new { area = "Company" } )" class="nav-item nav-link text-dark">Đăng Công Việc</a>
                         <a href="@Url.Action("Display","Company", new { area = "Company" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Công Ty<i class=""></i></a>
 

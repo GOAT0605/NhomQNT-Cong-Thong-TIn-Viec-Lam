@@ -32,11 +32,9 @@ namespace DACS_Web_Viec_Lam.Models
 
             public int? EmployerId { get; set; }
 
-
-            public Employer? Employer { get; set; }
-            public JobSeeker? JobSeeker { get; set; }
-
-            public int? JobSeekerId { get; set; }
+        public bool IsDetactive { get; set; }
+        public Employer? Employer { get; set; }
+           
         }
 
 

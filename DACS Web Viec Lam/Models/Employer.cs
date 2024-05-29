@@ -9,16 +9,7 @@ namespace DACS_Web_Viec_Lam.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int EmployerId { get; set; }
-        //public Employer()
-        //{
-        //    EmployerId = GenerateRandomId();
-        //}
-        //private int GenerateRandomId()
-        //{
-        //    // Generate a random integer using a random number generator
-        //    Random rand = new Random();
-        //    return rand.Next(100000, 999999); // Adjust the range as needed
-        //}
+      
         [Required, StringLength(130)]
        
         public string CompanyName { get; set; }

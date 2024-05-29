@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class _1 : Migration
+    public partial class _123 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -313,7 +313,7 @@ namespace DACS_Web_Viec_Lam.Migrations
                     Requirement = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationDeadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EmployerId = table.Column<int>(type: "int", nullable: true),
-                    JobSeekerId = table.Column<int>(type: "int", nullable: true),
+                    IsDetactive = table.Column<bool>(type: "bit", nullable: false),
                     TimeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -324,11 +324,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                         column: x => x.EmployerId,
                         principalTable: "Employers",
                         principalColumn: "EmployerId");
-                    table.ForeignKey(
-                        name: "FK_Job_JobSeeker_JobSeekerId",
-                        column: x => x.JobSeekerId,
-                        principalTable: "JobSeeker",
-                        principalColumn: "JobSeekerId");
                     table.ForeignKey(
                         name: "FK_Job_Times_TimeId",
                         column: x => x.TimeId,
@@ -341,6 +336,43 @@ namespace DACS_Web_Viec_Lam.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "applicationLists",
+                columns: table => new
+                {
+                    ApplicationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JobSeekerId = table.Column<int>(type: "int", nullable: true),
+                    JobId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_applicationLists", x => x.ApplicationId);
+                    table.ForeignKey(
+                        name: "FK_applicationLists_JobSeeker_JobSeekerId",
+                        column: x => x.JobSeekerId,
+                        principalTable: "JobSeeker",
+                        principalColumn: "JobSeekerId");
+                    table.ForeignKey(
+                        name: "FK_applicationLists_Job_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Job",
+                        principalColumn: "JobId");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_applicationLists_JobId",
+                table: "applicationLists",
+                column: "JobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_applicationLists_JobSeekerId",
+                table: "applicationLists",
+                column: "JobSeekerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -397,11 +429,6 @@ namespace DACS_Web_Viec_Lam.Migrations
                 column: "EmployerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Job_JobSeekerId",
-                table: "Job",
-                column: "JobSeekerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Job_TimeId",
                 table: "Job",
                 column: "TimeId");
@@ -415,6 +442,9 @@ namespace DACS_Web_Viec_Lam.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "applicationLists");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -440,10 +470,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "EmployerImage");
 
             migrationBuilder.DropTable(
-                name: "Job");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Job");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -452,10 +482,10 @@ namespace DACS_Web_Viec_Lam.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Employers");
+                name: "JobSeeker");
 
             migrationBuilder.DropTable(
-                name: "JobSeeker");
+                name: "Employers");
 
             migrationBuilder.DropTable(
                 name: "Times");

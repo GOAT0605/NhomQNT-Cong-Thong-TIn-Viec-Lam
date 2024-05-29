@@ -50,5 +50,10 @@ namespace DACS_Web_Viec_Lam.Interface
                 await _userManager.DeleteAsync(user);
             }
         }
+
+        public async Task<JobSeeker> GetByIdAsync(int id)
+        {
+            return await _context.JobSeeker.FindAsync(id);
+        }
     }
 }

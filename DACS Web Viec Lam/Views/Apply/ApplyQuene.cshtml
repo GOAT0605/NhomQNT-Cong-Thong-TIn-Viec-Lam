@@ -1,0 +1,32 @@
+﻿@model IEnumerable<DACS_Web_Viec_Lam.Models.CVViewModel>
+@{
+    ViewData["Title"] = "ApplyQuene";
+    Layout = "~/Views/Shared/head_foot.cshtml";
+}
+
+<h1>Danh Sách Công Việc Đã Ứng Tuyển</h1>
+<section class="py-2">
+    <div class="container px-4 px-lg-5 mt-5">
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach (var cv in Model)
+            {
+                <div>
+                    <h2>@cv.Title</h2>
+                    <p>@cv.JobDescription</p>
+                    <p>@cv.Requirement</p>
+                    <p>@cv.ApplicationDeadline.ToShortDateString()</p>
+                    <p>@cv.ApplicationDate</p>
+                    <p>@cv.Status</p>
+                    <p><img src="@cv.ImageUrl" alt="Job Seeker Image" /></p>
+                    <p>@cv.FullName</p>
+                    <p>@cv.PhoneNumber</p>
+                    <p>@cv.Email</p>
+                    <p>@cv.Educations</p>
+                    <p>@cv.Description</p>
+                    <p>@cv.Experiences</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Apply";
+    Layout = "~/Views/Shared/head_foot.cshtml";
+}
+@model IEnumerable<DACS_Web_Viec_Lam.Models.CVViewModel>
+<h1>Danh Sách Ứng Viên</h1>
+<a href="@Url.Action("ExportToExcel","Apply", new { area = "" } )" class="btn btn-primary ">Xuất ra excel<i class=""></i></a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên Công Việc
+            </th>
+            <th>
+                Ngày Ứng Tuyển
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>avatar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>
+                @Html.DisplayFor(modelItem => item.Title)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem =>item.ApplicationDate)
+            </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </th>
+
+                <td>
+                    <img src="@item.ImageUrl " alt="JobSeeker Image" style="width:100px; height: 150px;" />
+                </td>
+                <td>
+                    <a asp-action="Approve" asp-route-id="@item.ApplicationId">Approve</a> |
+                    <a asp-action="Disapprove" asp-route-id="@item.ApplicationId">Disapprove</a>|
+                    <a asp-action="Display" asp-route-id="@item.JobSeekerId">Details</a> 
+                 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

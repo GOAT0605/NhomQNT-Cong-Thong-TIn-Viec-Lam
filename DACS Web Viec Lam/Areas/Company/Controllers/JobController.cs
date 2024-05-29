@@ -24,6 +24,7 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            var allJob = _context.Job.AsQueryable();
             //var Employers = await _jobRepository.GetAllAsync();
             //foreach (var title in Employers)
             //{
@@ -32,8 +33,8 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             //        //title.Title = await _titleRepository.GetByIdAsync(title.TitleId);
             //    }
             //}
-           
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var employer = _context.Employers.FirstOrDefault(j => j.userId == userId);
 
                 if (employer == null)
@@ -41,9 +42,10 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
                     // No employer associated with the user, redirect to the Add action in CompanyController
                     return RedirectToAction("Add", "Company");
                 }
-
-                // Retrieve job entries that match the employer's ID
-                var employers = await _jobRepository.GetByUserIdAsync(employer.EmployerId);
+            // Lọc ra những sản phẩm không bị vô hiệu hoa
+            allJob = allJob.Where(p => !p.IsDetactive);
+            // Retrieve job entries that match the employer's ID
+            var employers = await _jobRepository.GetByUserIdAsync(employer.EmployerId);
                 return View(employers);
             
 
@@ -79,10 +81,10 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
     }
 
     // ModelState is not valid, return the Add view with validation errors
-    var titles = await _titleRepository.GetAllAsync();
-    ViewBag.TitleId = new SelectList(titles, "Id", "Name");
-    return View(job);
-}
+         var titles = await _titleRepository.GetAllAsync();
+          ViewBag.TitleId = new SelectList(titles, "Id", "Name");
+            return View(job);
+    }
 
 
         public async Task<IActionResult> Display(int id)
@@ -120,6 +122,38 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(job);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Company")]
+        public async Task<IActionResult> DeactivateProduct(int id)
+        {
+            var product = await _context.Job.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.IsDetactive = true;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Company")]
+
+        public async Task<IActionResult> ReactivateProduct(int id)
+        {
+            var product = await _context.Job.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.IsDetactive = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
