@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     /// <inheritdoc />
-    public partial class _123 : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -119,6 +119,22 @@ namespace DACS_Web_Viec_Lam.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_JobSeeker", x => x.JobSeekerId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "notifications",
+                columns: table => new
+                {
+                    NotificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_notifications", x => x.NotificationId);
                 });
 
             migrationBuilder.CreateTable(
@@ -468,6 +484,9 @@ namespace DACS_Web_Viec_Lam.Migrations
 
             migrationBuilder.DropTable(
                 name: "EmployerImage");
+
+            migrationBuilder.DropTable(
+                name: "notifications");
 
             migrationBuilder.DropTable(
                 name: "Roles");

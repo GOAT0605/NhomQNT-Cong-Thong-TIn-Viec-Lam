@@ -102,6 +102,9 @@
                         }
                         if (User.IsInRole("Company"))
                         {
+                            <a href="@Url.Action("NotificationList", "Employer", new { area = "" })" class="nav-link">
+                                <i class="bi bi-bell-fill icon-large ms-2"></i>
+                            </a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Quản Lý Công Việc</a>
                                 <div class="dropdown-menu rounded-0 m-0">

@@ -37,7 +37,7 @@ namespace DACS_Web_Viec_Lam.Controllers
             var jobSeeker = _context.JobSeeker.FirstOrDefault(j => j.userId == userId);
             return View(jobSeeker);
         }
-
+        //Nop don tuyen63 dung5
         [Authorize(Roles = SD.Role_JobSeeker)]
         [HttpPost]
         public async Task<IActionResult> Add(ApplicationList applicationList, int id)
@@ -56,7 +56,9 @@ namespace DACS_Web_Viec_Lam.Controllers
 
                 _context.applicationLists.Add(applicationList);
                 await _context.SaveChangesAsync();
-
+                var company = await _context.Job.FirstOrDefaultAsync(j => j.JobId == id);
+                var message = $"Application with name {jobSeeker.FullName} has been applied.";
+                await AddCompanyNotification((int)company.EmployerId, message);
                 return RedirectToAction(nameof(ApplyQuene));
             }
             else
@@ -194,7 +196,11 @@ namespace DACS_Web_Viec_Lam.Controllers
             }
         public async Task AddNotification(int userId, string message)
         {
-            _notificationRepository.AddNotification(userId, message);
+            _notificationRepository.AddJobSeekerNotification(userId, message);
+        }
+        public async Task AddCompanyNotification(int userId, string message)
+        {
+            _notificationRepository.AddCompanyNotification(userId, message);
         }
         public async Task<IActionResult> Disapprove(int id)
         {
@@ -212,7 +218,10 @@ namespace DACS_Web_Viec_Lam.Controllers
             apply.Status = ApplicationStatus.Declined;
             _context.Update(apply);
             await _context.SaveChangesAsync();
-
+            var userId = apply.JobSeekerId;
+            var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
+            var message = $"Application with name {jobseeker.FullName} has been declined.";
+            await AddNotification((int)userId, message);
             return RedirectToAction("Apply");
         }
         

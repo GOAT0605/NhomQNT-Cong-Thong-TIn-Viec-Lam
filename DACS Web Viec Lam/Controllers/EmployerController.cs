@@ -79,27 +79,40 @@ namespace DACS_Web_Viec_Lam.Controllers
         {
             return View();
         }
-        public IActionResult NotificationLIst()
+        public IActionResult NotificationList()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
-                return Challenge(); 
+                return Challenge();
             }
 
-            var jobSeeker = _context.JobSeeker
-               .FirstOrDefault(j => j.userId == userId);
-            var notifications = _context.notifications
-                .Where(n => n.UserId == jobSeeker.JobSeekerId && !n.IsRead)
-                .OrderByDescending(n => n.CreatedDate)
-                .ToList();
+            var jobSeeker = _context.JobSeeker.FirstOrDefault(j => j.userId == userId);
+            var company = _context.Employers.FirstOrDefault(j => j.userId == userId);
+            IEnumerable<Notification> notifications = new List<Notification>();
+
+            if (User.IsInRole("JobSeeker") && jobSeeker != null)
+            {
+                notifications = _context.notifications
+                    .Where(n => n.JobseekerId == jobSeeker.JobSeekerId && !n.IsRead)
+                    .OrderByDescending(n => n.CreatedDate)
+                    .ToList();
+            }
+            else if (User.IsInRole("Company") && company != null)
+            {
+                notifications = _context.notifications
+                    .Where(n => n.CompanyId == company.EmployerId && !n.IsRead)
+                    .OrderByDescending(n => n.CreatedDate)
+                    .ToList();
+            }
 
             return View(notifications);
-          
         }
+
         [HttpPost]
         public async Task<IActionResult> MarkAsRead(int notificationId)
         {
+         
             var notification = _context.notifications.FirstOrDefault(j => j.NotificationId == notificationId);
 
             if (notification != null)
@@ -110,5 +123,34 @@ namespace DACS_Web_Viec_Lam.Controllers
 
             return RedirectToAction("NotificationList"); 
         }
+        public async Task<IActionResult> MarkAllAsRead()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Challenge();
+            }
+            var company = _context.Employers.FirstOrDefault(j => j.userId == userId);
+            if (company == null)
+            {
+                return NotFound();
+            }
+            var notifications = _context.notifications
+              .Where(n => n.CompanyId == company.EmployerId && !n.IsRead)
+              .OrderByDescending(n => n.CreatedDate)
+              .ToList();
+
+            if (notifications.Any())
+            {
+                foreach (var notification in notifications)
+                {
+                    notification.IsRead = true;
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("NotificationList");
+        }
     }
 }
+//var cvs = await _context.applicationLists.Where(j => j.JobSeekerId == jobSeeker.JobSeekerId).ToListAsync();

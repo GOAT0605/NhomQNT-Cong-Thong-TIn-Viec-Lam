@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS_Web_Viec_Lam.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240526083622_Test2")]
-    partial class Test2
+    [Migration("20240602120015_test1")]
+    partial class test1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -339,6 +339,9 @@ namespace DACS_Web_Viec_Lam.Migrations
                     b.Property<int?>("EmployerId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDetactive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -426,18 +429,21 @@ namespace DACS_Web_Viec_Lam.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("JobseekerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("NotificationId");
 
