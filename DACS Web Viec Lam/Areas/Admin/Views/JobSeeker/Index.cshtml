@@ -30,12 +30,12 @@
 <table class="table">
     <thead>
         <tr>
-            <th>FullName</th>
-            <th>Username</th>
+            <th>Họ tên</th>
+@*             <th>Username</th> *@
             <th>Email</th>
-            <th>Address</th>
-            <th>Actions</th>
-            <th>Status</th>
+            <th>Địa chỉ</th>
+            <th></th>
+            <th>Trạng thái</th>
         </tr>
     </thead>
     <tbody>
@@ -47,25 +47,25 @@
                 <td>@user.Email</td>
                 <td>@user.Address</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Edit</button></a>
+                    <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Sửa</button></a>
 
                     <form asp-action="LockAccount" method="post" style="display: inline;">
                         <input type="hidden" name="id" value="@user.Id" />
-                        <input class="btn btn-danger" type="submit" value="Block" />
+                        <input class="btn btn-danger" type="submit" value="Khóa" />
                     </form>
                     <form asp-action="UnlockAccount" method="post" style="display: inline;">
                         <input type="hidden" name="id" value="@user.Id" />
-                        <input class="btn btn-success" type="submit" value="Unlock" />
+                        <input class="btn btn-success" type="submit" value="Mở khóa" />
                     </form>
                 </td>
                 <td>
                     @if (user.LockoutEnd != DateTimeOffset.MaxValue)
                     {
-                        <span class="text-success">Unblock</span>
+                        <span class="text-success">Chưa khóa</span>
                     }
                     else
                     {
-                        <span class="text-danger">Blocked</span>
+                        <span class="text-danger">Đã khóa</span>
 
                     }
                 </td>

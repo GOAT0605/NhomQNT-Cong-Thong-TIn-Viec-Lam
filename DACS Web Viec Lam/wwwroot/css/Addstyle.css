@@ -1,0 +1,29 @@
+﻿.form-control {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+button[type="submit"] {
+    border-radius: 5px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.label {
+    font-family: "Arial Black", sans-serif;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+h1, h4 {
+    margin-left: 70px;
+}
+}

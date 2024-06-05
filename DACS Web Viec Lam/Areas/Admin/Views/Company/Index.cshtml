@@ -25,10 +25,11 @@
 <table class="table">
     <thead>
         <tr>
-            <th>FullName</th>
-            <th>Username</th>
+            <th>Tên công ty</th>
+            <th></th>
             <th>Email</th>
-            <th>Actions</th>
+
+            <th>Trạng thái</th>
         </tr>
     </thead>
     <tbody>
@@ -36,28 +37,28 @@
         {
             <tr>
                 <td>@user.FullName</td>
-                <td>@user.UserName</td>
+@*                 <td>@user.UserName</td> *@
                 <td>@user.Email</td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Edit</button></a>
+                    <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Sửa</button></a>
                     <form asp-action="LockAccount" method="post" style="display: inline;">
                         <input type="hidden" name="id" value="@user.Id" />
-                        <input class="btn btn-danger" type="submit" value="Lock" />
+                        <input class="btn btn-danger" type="submit" value="Khóa" />
                     </form>
                     <form asp-action="UnlockAccount" method="post" style="display: inline;">
                         <input type="hidden" name="id" value="@user.Id" />
-                        <input class="btn btn-success" type="submit" value="Unlock" />
+                        <input class="btn btn-success" type="submit" value="Mở khóa" />
                     </form>
                 </td>
                 <td>
                     @if (user.LockoutEnd != DateTimeOffset.MaxValue)
                     {
-                        <span class="text-success"> chưa block </span>
+                        <span class="text-success"> Chưa khóa </span>
                     }
                     else
                     {
-                        <span class="text-danger"> Đã block </span>
+                        <span class="text-danger"> Đã khóa </span>
 
                     }
                 </td>

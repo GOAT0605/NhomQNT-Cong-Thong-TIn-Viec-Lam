@@ -12,6 +12,11 @@ body {
     text-align: center;
 }
 
+.user-dropdown {
+    display: flex; /* Bật chế độ flexbox */
+    align-items: center; /* Căn chỉnh các phần tử theo chiều dọc */
+}
+
 .register-form {
     border: 1px solid #ccc;
     padding: 20px;

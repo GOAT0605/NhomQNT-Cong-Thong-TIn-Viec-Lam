@@ -71,7 +71,7 @@
                     </div>
                     @* <a href="@Url.Action("Category","Employer")" class="nav-item nav-link">Đăng nhập</a>
                     <a href="about.html" class="nav-item nav-link">Đăng ký</a> *@
-                    <partial name="_LoginPartial" />
+                   
                 </div>
                @*  <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Đăng công việc<i class="fa fa-arrow-right ms-3"></i></a> *@
                 @if (User.Identity.IsAuthenticated)
@@ -101,6 +101,7 @@
                 }
                 @*  <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Đăng công việc<i class="fa fa-arrow-right ms-3"></i></a> *@
             </div>
+            <partial name="_LoginPartial" />
         </nav>
         <!-- Navbar End -->
 

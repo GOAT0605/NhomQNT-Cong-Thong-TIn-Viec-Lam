@@ -23,7 +23,11 @@ namespace DACS_Web_Viec_Lam.Controllers
         public async Task<IActionResult> Index()
         {
             // Assuming you have a context or repository to access Jobs and Employers
-            var jobs = await _context.Job.Include(j => j.Employer).ToListAsync();
+            var jobs = await _context.Job
+    .Include(j => j.Employer) // Include the related Employer entity
+    .Where(j => j.IsDetactive == false) // Filter out inactive jobs
+    .ToListAsync();
+            var allJob = _context.Job.AsQueryable();
 
             var jobViewModels = jobs.Select(job => new JobViewModel
             {
@@ -36,7 +40,8 @@ namespace DACS_Web_Viec_Lam.Controllers
                 ApplicationDeadline = job.ApplicationDeadline,
                 EmployerName = job.Employer?.CompanyName,
                 ImageUrl = job.Employer?.ImageUrl ?? "default-image-url" // Provide a default image URL if not found
-            }).ToList();
+                
+        }).ToList();
 
             return View(jobViewModels);
         }

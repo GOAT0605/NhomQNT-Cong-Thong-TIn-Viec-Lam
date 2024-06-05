@@ -5,29 +5,49 @@
 }
 
 <!-- Carousel Start -->
+<div class="container-fluid p-0">
+    <div class="owl-carousel header-carousel position-relative">
+        <div class="owl-carousel-item position-relative">
+            <img class="img-fluid" src="~/template/img/nhan-vien-van-phong-la-gi-ky-nang.jpg" />
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(43, 57, 64, .5);">
+                <div class="container">
+                    <div class="row justify-content-start">
+                        <div class="col-10 col-lg-8">
+                            <h1 class="display-3 text-white animated slideInDown mb-4">Tìm kiếm công việc phù hợp với năng lực và sở thích của bạn.</h1>
+                            <p class="fs-5 fw-medium text-white mb-4 pb-2">Tìm hiểu thông tin về thị trường lao động và các xu hướng tuyển dụng mới nhất.</p>
+                            <a href="@Url.Action("Search","Employer")" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Tìm việc ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="owl-carousel-item position-relative">
+            <img class="img-fluid" src="~/template/img/hinh-bat-tay-hop-tac-800x534.jpg" />
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(43, 57, 64, .5);">
+                <div class="container">
+                    <div class="row justify-content-start">
+                        <div class="col-10 col-lg-8">
+                            <h1 class="display-3 text-white animated slideInDown mb-4">QNT - Cổng Thông Tin Việc Làm là cầu nối giữa người lao động và nhà tuyển dụng.</h1>
+                            <p class="fs-5 fw-medium text-white mb-4 pb-2">Tiết kiệm thời gian và công sức trong việc tìm kiếm việc làm, tăng cơ hội nhận được công việc mơ ước.</p>
+                            <a href="@Url.Action("Search","Employer")" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Tìm việc ngay</a>
+                            @*                             <a href="" class="btn btn-secondary py-md-3 px-md-5 animated slideInRight">Find A Talent</a> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Carousel End -->
 <!-- Search Start -->
 <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
     <div class="container">
         <form method="get" asp-controller="" asp-action="Search">
-            <div class="row g-2">
-                <div class="col-md-10">
-                    <div class="row g-2">
-                        <div class="col-md-4">
-                            <input type="text" name="searchString" class="form-control border-0" placeholder="Tìm công việc mong muốn" aria-label="Search" name="searchString" />
-                        </div>
-                        <div class="col-md-4">
-                            @* <select name="category" class="form-select border-0">
-                                <option selected value="">Category</option>
-                                                               <option value="Marketing">Marketing</option>
-                                <option value="Customer Service">Customer Service</option>
-                                <option value="Human Resource">Human Resource</option>
-                                <option value="Project Management">Project Management</option>
-                            </select> *@
-                        </div>
-                    </div>
+            <div class="row g-2 align-items-center justify-content-center">
+                <div class="col-md-9">
+                    <input type="text" name="searchString" class="form-control border-0" placeholder="Tìm công việc mong muốn" aria-label="Search" name="searchString" />
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <button type="submit" class="btn btn-dark border-0 w-100">Tìm kiếm</button>
                 </div>
             </div>
@@ -122,7 +142,7 @@
                             </div>
                         </div>
                     }
-                    <a class="btn btn-primary py-3 px-5" href="">Browse More Jobs</a>
+                    <a class="btn btn-primary py-3 px-5" href="">Xem thêm</a>
                 </div>
             </div>
         </div>
