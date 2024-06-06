@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
 {
     [Area("Company")]
-    [Authorize(Roles = SD.Role_Company)]
+    [Authorize(Roles = SD.Role_Company + "," + SD.Role_Admin)]
     public class JobController : Controller
     {
         private readonly IJobRepository _jobRepository;
@@ -22,6 +22,9 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             _titleRepository = titleRepository;
             _context = context;
         }
+        [HttpPost]
+      
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Company)]
         public async Task<IActionResult> Index()
         {
             var allJob = _context.Job.AsQueryable();
@@ -124,7 +127,8 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             return View(job);
         }
         [HttpPost]
-        [Authorize(Roles = "Company")]
+
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Company)]
         public async Task<IActionResult> DeactivateProduct(int id)
         {
             var product = await _context.Job.FindAsync(id);
@@ -140,7 +144,8 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Company")]
+
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Company)]
 
         public async Task<IActionResult> ReactivateProduct(int id)
         {
