@@ -59,6 +59,9 @@ namespace DACS_Web_Viec_Lam.Controllers
                 var company = await _context.Job.FirstOrDefaultAsync(j => j.JobId == id);
                 var message = $"Application with name {jobSeeker.FullName} has been applied.";
                 await AddCompanyNotification((int)company.EmployerId, message);
+                var employer = await _context.Employers.FirstOrDefaultAsync(j => j.EmployerId == company.EmployerId);
+                EmailSender emailSender = new EmailSender();
+                bool Email = emailSender.SendEmail(employer.contactMail, message);
                 return RedirectToAction(nameof(ApplyQuene));
             }
             else
@@ -188,9 +191,12 @@ namespace DACS_Web_Viec_Lam.Controllers
                 apply.Status = ApplicationStatus.Applied;
                 _context.Update(apply);
                 await _context.SaveChangesAsync();
+       
             var userId = apply.JobSeekerId;
             var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
             var message = $"Application with name {jobseeker.FullName} has been approved.";
+            EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
+            bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
             await AddNotification((int)userId, message);
             return RedirectToAction("Apply");
             }
@@ -221,6 +227,8 @@ namespace DACS_Web_Viec_Lam.Controllers
             var userId = apply.JobSeekerId;
             var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
             var message = $"Application with name {jobseeker.FullName} has been declined.";
+            EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
+            bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
             await AddNotification((int)userId, message);
             return RedirectToAction("Apply");
         }
