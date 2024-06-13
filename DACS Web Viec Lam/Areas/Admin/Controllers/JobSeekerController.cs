@@ -27,8 +27,9 @@ namespace DACS_Web_Viec_Lam.Controllers
         {
             var jobseekers = await _userManager.GetUsersInRoleAsync("JobSeeker");
             var jobseekerIds = jobseekers.Select(u => u.Id).ToList();
-            var alljobseeker = from s in _context.Users 
-                               where jobseekerIds.Contains(s.Id) select s;
+            var alljobseeker = from s in _context.Users
+                               where jobseekerIds.Contains(s.Id)
+                               select s;
             if (!string.IsNullOrEmpty(searchString))
             {
                 string lowercaseSearchString = searchString.ToLower();
@@ -40,7 +41,7 @@ namespace DACS_Web_Viec_Lam.Controllers
             }
             int pageSize = 2;
             int pageNum = page ?? 1;
-            return View( alljobseeker.ToPagedList(pageNum, pageSize));
+            return View(alljobseeker.ToPagedList(pageNum, pageSize));
         }
         public async Task<IActionResult> Edit(string id)
         {
@@ -65,12 +66,13 @@ namespace DACS_Web_Viec_Lam.Controllers
                 var existingJobseeker = await _jobseekerRepository.GetByIdAsync(id);// Giả định có phương thức GetByIdAsync
                 existingJobseeker.FullName = jobseekers.FullName;
                 existingJobseeker.UserName = jobseekers.UserName;
-               // existingJobseeker.PasswordHash = jobseekers.PasswordHash;
+                // existingJobseeker.PasswordHash = jobseekers.PasswordHash;
                 existingJobseeker.Email = jobseekers.Email;
                 await _jobseekerRepository.UpdateAsync(existingJobseeker);
                 return RedirectToAction(nameof(Index));
 
-            }return View(jobseekers);
+            }
+            return View(jobseekers);
         }
         public async Task<IActionResult> LockAccount(string id)
         {

@@ -35,7 +35,7 @@ namespace DACS_Web_Viec_Lam.Areas.Employee.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+
                 await _titleRepository.AddAsync(title);
                 return RedirectToAction(nameof(Index));
             }

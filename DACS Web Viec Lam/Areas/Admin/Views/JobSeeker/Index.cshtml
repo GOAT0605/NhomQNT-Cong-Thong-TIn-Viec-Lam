@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/head_foot.cshtml";
 }
-<h1>JobSeeker</h1>
+<h1>Danh Sách Người Tìm Việc</h1>
 @using (Html.BeginForm())
 {
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
@@ -14,7 +14,7 @@
                 @* Search bar *@
                 <form class="d-flex" asp-controller="" asp-action="Search" method="get" style="width: 150px;">
                     <input class="form-control me-2" type="search" id="txtSearch" placeholder="Search" aria-label="Search" name="searchString">
-                    <button class="btn btn-secondary" type="submit" value="Search">
+                    <button class="btn btn-secondary" type="submit" value="Tìm kiếm theo tên">
                         <img src="https://cdn.icon-icons.com/icons2/2768/PNG/512/search_button_icon_176619.png" class="img-fluid rounded" alt="ICON" style="max-width: 30px; height: 30px;">
                     </button>
                 </form>
@@ -27,14 +27,14 @@
         @TempData["Message"]
     </div>
 }
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>Họ tên</th>
-@*             <th>Username</th> *@
+            @*             <th>Username</th> *@
+            <th>Tài khoản</th>
             <th>Email</th>
-            <th>Địa chỉ</th>
-            <th></th>
+            <th>Tùy chỉnh</th>
             <th>Trạng thái</th>
         </tr>
     </thead>
@@ -45,7 +45,6 @@
                 <td>@user.FullName</td>
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
-                <td>@user.Address</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@user.Id"><button type="submit" class="btn btn-primary">Sửa</button></a>
 

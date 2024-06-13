@@ -51,7 +51,7 @@ List<IFormFile> imageUrls)
                     foreach (var file in imageUrls)
                     {
                         // Lưu các hình ảnh khác
-                     Employer.ImageUrl = await SaveImage(imageUrl);
+                        Employer.ImageUrl = await SaveImage(imageUrl);
                     }
                 }
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -64,7 +64,7 @@ List<IFormFile> imageUrls)
         private async Task<string> SaveImage(IFormFile image)
         {
             var savePath = Path.Combine("wwwroot/images", image.FileName); // Thay đổi đường dẫn theo cấu hình của bạn
- using (var fileStream = new FileStream(savePath, FileMode.Create))
+            using (var fileStream = new FileStream(savePath, FileMode.Create))
             {
                 await image.CopyToAsync(fileStream);
             }
