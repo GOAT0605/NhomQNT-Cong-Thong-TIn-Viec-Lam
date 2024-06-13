@@ -48,6 +48,17 @@ namespace DACS_Web_Viec_Lam.Controllers
 
             if (jobSeeker != null)
             {
+                // Check if an application already exists for the same JobId and JobSeekerId
+                var existingApplication = _context.applicationLists
+           .FirstOrDefault(a => a.JobId == id && a.JobSeekerId == jobSeeker.JobSeekerId &&
+                                (a.Status == ApplicationStatus.Applied || a.Status == ApplicationStatus.NotChecked));
+
+                if (existingApplication != null)
+                {
+                    // Application already exists, redirect to home
+                    return RedirectToAction("Index", "Employer");
+                }
+
                 applicationList = new ApplicationList
                 {
                     ApplicationDate = DateTime.Now,
@@ -70,6 +81,7 @@ namespace DACS_Web_Viec_Lam.Controllers
                 return RedirectToAction("Add", "JobSeeker");
             }
         }
+
 
         public async Task<IActionResult> ApplyQuene()
         {
@@ -204,7 +216,7 @@ namespace DACS_Web_Viec_Lam.Controllers
          .Where(j => j.JobSeekerId == userId && j.Status == ApplicationStatus.NotChecked)
          .ToListAsync();
 
-            var message1 = $"Application with name {jobseeker.FullName} has been declined due to another being approved.";
+            var message1 = $"Application with name {jobseeker.FullName} has been declined due to another company approved.";
 
             // Update application status and fetch company details
             foreach (var application in applicationsToDecline)
@@ -254,14 +266,38 @@ namespace DACS_Web_Viec_Lam.Controllers
             EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
             bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
             await AddNotification((int)userId, message);
-            if (User.IsInRole("JobSeeker"))
-            {
-                return RedirectToAction("ApplyQuene");
-            }
-           
+          
             return RedirectToAction("Apply");
         }
-        
+        public async Task<IActionResult> WithDraw(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest("Invalid application id.");
+            }
+
+            var apply = await _context.applicationLists.FindAsync(id);
+            if (apply == null)
+            {
+                return NotFound($"Application with id {id} not found.");
+            }
+            if(apply.Status == ApplicationStatus.NotChecked)
+            {
+                apply.Status = ApplicationStatus.WithDraw;
+            }
+            
+            _context.Update(apply);
+            await _context.SaveChangesAsync();
+            var userId = apply.JobSeekerId;
+            var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
+            var message = $"Application with name {jobseeker.FullName} has been Withdraw.";
+            EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
+            bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
+            await AddNotification((int)userId, message);
+           
+
+            return RedirectToAction("ApplyQuene");
+        }
         public async Task<IActionResult> Display(int id)
         {
             var product = await _JobSeekerRepository.GetByIdAsync(id);
