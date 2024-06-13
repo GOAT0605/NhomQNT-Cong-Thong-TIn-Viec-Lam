@@ -18,14 +18,16 @@
                     <p>@cv.ApplicationDeadline.ToShortDateString()</p>
                     <p>@cv.ApplicationDate</p>
                     <p>@cv.Status</p>
-                    <p><img src="@cv.ImageUrl" alt="Job Seeker Image" /></p>
                     <p>@cv.FullName</p>
                     <p>@cv.PhoneNumber</p>
                     <p>@cv.Email</p>
                     <p>@cv.Educations</p>
                     <p>@cv.Description</p>
                     <p>@cv.Experiences</p>
+                    <p><img src="@cv.ImageUrl" alt="Job Seeker Image" /></p>
+                    <a asp-action="Disapprove" asp-route-id="@cv.ApplicationId">rút lại</a>|
                 </div>
+      
             }
         </div>
     </div>

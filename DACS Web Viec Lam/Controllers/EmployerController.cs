@@ -20,9 +20,16 @@ namespace DACS_Web_Viec_Lam.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            // Assuming you have a context or repository to access Jobs and Employers
+          
             var jobs = await _context.Job.Include(j => j.Employer).ToListAsync();
-
+            foreach (var job in jobs)
+            {
+                if (DateTime.Now > job.ApplicationDeadline)
+                {
+                    job.IsDetactive = true;
+                }
+            }
+            await _context.SaveChangesAsync();
             var jobViewModels = jobs.Select(job => new JobViewModel
             {
                 JobId = job.JobId,
@@ -33,7 +40,7 @@ namespace DACS_Web_Viec_Lam.Controllers
                 Requirement = job.Requirement,
                 ApplicationDeadline = job.ApplicationDeadline,
                 EmployerName = job.Employer?.CompanyName,
-                ImageUrl = job.Employer?.ImageUrl ?? "default-image-url" // Provide a default image URL if not found
+                ImageUrl = job.Employer?.ImageUrl ?? "default-image-url" 
             }).ToList();
 
             return View(jobViewModels);
@@ -47,7 +54,12 @@ namespace DACS_Web_Viec_Lam.Controllers
             {
                 return NotFound();
             }
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var jobSeeker = _context.JobSeeker.FirstOrDefault(j => j.userId == userId);
+            if(jobSeeker == null)
+            {
+                return RedirectToAction("Add", "JobSeeker", new { area = "JobSeeker" });
+            }
             var jobViewModel = new JobViewModel
             {
                 JobId = job.JobId,

@@ -10,6 +10,7 @@ using OfficeOpenXml;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DACS_Web_Viec_Lam.Controllers
 {
@@ -191,13 +192,36 @@ namespace DACS_Web_Viec_Lam.Controllers
                 apply.Status = ApplicationStatus.Applied;
                 _context.Update(apply);
                 await _context.SaveChangesAsync();
-       
+             //thong bao
             var userId = apply.JobSeekerId;
             var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
             var message = $"Application with name {jobseeker.FullName} has been approved.";
             EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
             bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
             await AddNotification((int)userId, message);
+            //auto tu choi
+            var applicationsToDecline = await _context.applicationLists
+         .Where(j => j.JobSeekerId == userId && j.Status == ApplicationStatus.NotChecked)
+         .ToListAsync();
+
+            var message1 = $"Application with name {jobseeker.FullName} has been declined due to another being approved.";
+
+            // Update application status and fetch company details
+            foreach (var application in applicationsToDecline)
+            {
+                application.Status = ApplicationStatus.Declined;
+                _context.Update(application);
+
+                // Fetch the company details for the current application
+                var job = await _context.Job.FirstOrDefaultAsync(j => j.JobId == application.JobId);
+                if (job != null)
+                {
+                    await AddNotification((int)job.EmployerId, message1);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Apply");
             }
         public async Task AddNotification(int userId, string message)
@@ -230,6 +254,11 @@ namespace DACS_Web_Viec_Lam.Controllers
             EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
             bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
             await AddNotification((int)userId, message);
+            if (User.IsInRole("JobSeeker"))
+            {
+                return RedirectToAction("ApplyQuene");
+            }
+           
             return RedirectToAction("Apply");
         }
         
