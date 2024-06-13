@@ -47,7 +47,12 @@ namespace DACS_Web_Viec_Lam.Controllers
             {
                 return NotFound();
             }
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var jobSeeker = _context.JobSeeker.FirstOrDefault(j => j.userId == userId);
+            if (jobSeeker == null)
+            {
+                return RedirectToAction("Add", "JobSeeker", new { area = "JobSeeker" });
+            }
             var jobViewModel = new JobViewModel
             {
                 JobId = job.JobId,

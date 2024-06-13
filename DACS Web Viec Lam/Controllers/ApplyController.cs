@@ -60,8 +60,8 @@ namespace DACS_Web_Viec_Lam.Controllers
                 var message = $"Application with name {jobSeeker.FullName} has been applied.";
                 await AddCompanyNotification((int)company.EmployerId, message);
                 var employer = await _context.Employers.FirstOrDefaultAsync(j => j.EmployerId == company.EmployerId);
-                EmailSender emailSender = new EmailSender();
-                bool Email = emailSender.SendEmail(employer.contactMail, message);
+                EmailSender EmailSender = new EmailSender();
+                bool Email = EmailSender.SendEmail(jobSeeker.Email, "Cảm ơn bạn đã gửi đươn ứng tuyển. Bài viết của bạn sẽ được hiển thị sau khi chúng tôi kiểm duyệt xong! Thân chào");
                 return RedirectToAction(nameof(ApplyQuene));
             }
             else
