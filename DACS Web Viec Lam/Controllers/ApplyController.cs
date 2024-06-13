@@ -170,28 +170,28 @@ namespace DACS_Web_Viec_Lam.Controllers
 
             return View(cvViewModels);
         }
-            public async Task<IActionResult> Approve(int id)
+        public async Task<IActionResult> Approve(int id)
+        {
+            if (id == 0)
             {
-                if (id == 0)
-                {
-                    return BadRequest("Invalid application id.");
-                }
+                return BadRequest("Invalid application id.");
+            }
 
-                var apply = await _context.applicationLists.FindAsync(id);
-                if (apply == null)
-                {
-                    return NotFound($"Application with id {id} not found.");
-                }
+            var apply = await _context.applicationLists.FindAsync(id);
+            if (apply == null)
+            {
+                return NotFound($"Application with id {id} not found.");
+            }
 
-                apply.Status = ApplicationStatus.Applied;
-                _context.Update(apply);
-                await _context.SaveChangesAsync();
+            apply.Status = ApplicationStatus.Applied;
+            _context.Update(apply);
+            await _context.SaveChangesAsync();
             var userId = apply.JobSeekerId;
             var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
             var message = $"Application with name {jobseeker.FullName} has been approved.";
             await AddNotification((int)userId, message);
             return RedirectToAction("Apply");
-            }
+        }
         public async Task AddNotification(int userId, string message)
         {
             _notificationRepository.AddNotification(userId, message);
@@ -215,7 +215,7 @@ namespace DACS_Web_Viec_Lam.Controllers
 
             return RedirectToAction("Apply");
         }
-        
+
         public async Task<IActionResult> Display(int id)
         {
             var product = await _JobSeekerRepository.GetByIdAsync(id);
@@ -303,22 +303,22 @@ namespace DACS_Web_Viec_Lam.Controllers
                 int row = 2;
                 foreach (var employer in cvViewModels)
                 {
-                    
-                        worksheet.Cells[row, 1].Value = employer.Title;
-                        worksheet.Cells[row, 2].Value = employer.JobDescription;
-                        worksheet.Cells[row, 3].Value = employer.Requirement;
-                        worksheet.Cells[row, 4].Value = employer.ApplicationDeadline;
-                        worksheet.Cells[row, 5].Value = employer.JobSeekerId;
-                        worksheet.Cells[row, 6].Value = employer.Status;
-                        worksheet.Cells[row, 7].Value = employer.FullName;
-                        worksheet.Cells[row, 8].Value = employer.PhoneNumber;
-                        worksheet.Cells[row, 9].Value = employer.Email;
-                        worksheet.Cells[row, 10].Value = employer.Educations;
-                        worksheet.Cells[row, 11].Value = employer.Description;
-                        worksheet.Cells[row, 12].Value = employer.Experiences;
 
-                        row++;
-                    
+                    worksheet.Cells[row, 1].Value = employer.Title;
+                    worksheet.Cells[row, 2].Value = employer.JobDescription;
+                    worksheet.Cells[row, 3].Value = employer.Requirement;
+                    worksheet.Cells[row, 4].Value = employer.ApplicationDeadline;
+                    worksheet.Cells[row, 5].Value = employer.JobSeekerId;
+                    worksheet.Cells[row, 6].Value = employer.Status;
+                    worksheet.Cells[row, 7].Value = employer.FullName;
+                    worksheet.Cells[row, 8].Value = employer.PhoneNumber;
+                    worksheet.Cells[row, 9].Value = employer.Email;
+                    worksheet.Cells[row, 10].Value = employer.Educations;
+                    worksheet.Cells[row, 11].Value = employer.Description;
+                    worksheet.Cells[row, 12].Value = employer.Experiences;
+
+                    row++;
+
                 }
 
                 // Format the header

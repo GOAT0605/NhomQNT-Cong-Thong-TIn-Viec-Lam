@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Index";
-    Layout = "~/Areas/JobSeeker/Views/Shared/head_foot.cshtml";
+    Layout = "~/Views/Shared/head_foot.cshtml";
 }
 <!DOCTYPE html>
 <html lang="vi">
@@ -43,8 +43,8 @@
                 <img src="@Model.ImageUrl" alt="Ảnh đại diện" style="width:200px; height: 100px;">
             </div>
         </div>
-        <a asp-action="Edit" asp-route-id="@Model?.JobSeekerId">Sửa</a> 
+        <a asp-action="Edit" asp-route-id="@Model?.JobSeekerId">Sửa</a>
     </div>
-    </div>
+
 </body>
 </html>

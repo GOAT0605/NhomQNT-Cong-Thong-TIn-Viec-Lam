@@ -23,11 +23,23 @@ namespace DACS_Web_Viec_Lam.Controllers
         public async Task<IActionResult> Index()
         {
             // Assuming you have a context or repository to access Jobs and Employers
-            var jobs = await _context.Job
+            var jobtemp = await _context.Job
     .Include(j => j.Employer) // Include the related Employer entity
     .Where(j => j.IsDetactive == false) // Filter out inactive jobs
     .ToListAsync();
             var allJob = _context.Job.AsQueryable();
+            foreach (var job in jobtemp)
+            {
+                if (DateTime.Now > job.ApplicationDeadline)
+                {
+                    job.IsDetactive = true;
+                }
+            }
+            await _context.SaveChangesAsync();
+            var jobs = await _context.Job
+    .Include(j => j.Employer) // Include the related Employer entity
+    .Where(j => j.IsDetactive == false) // Filter out inactive jobs
+    .ToListAsync();
 
             var jobViewModels = jobs.Select(job => new JobViewModel
             {
@@ -40,10 +52,18 @@ namespace DACS_Web_Viec_Lam.Controllers
                 ApplicationDeadline = job.ApplicationDeadline,
                 EmployerName = job.Employer?.CompanyName,
                 ImageUrl = job.Employer?.ImageUrl ?? "default-image-url" // Provide a default image URL if not found
-                
-        }).ToList();
 
-            return View(jobViewModels);
+            }).ToList();
+            var random = new Random();
+            jobViewModels = jobViewModels.OrderBy(x => random.Next()).ToList();
+
+            int numberOfJobsToDisplay = random.Next(8, 13);
+
+
+            var selectedJobViewModels = jobViewModels.Take(numberOfJobsToDisplay).ToList();
+
+            return View(selectedJobViewModels);
+
         }
         //[Area("JobSeeker")]
         [Authorize(Roles = SD.Role_JobSeeker)]
@@ -91,16 +111,37 @@ namespace DACS_Web_Viec_Lam.Controllers
         {
             // Lấy tất cả các employee từ context
             var allRole = from s in _context.Job
-                              select s;
+                          select s;
+            var jobs = await _context.Job
+   .Include(j => j.Employer) // Include the related Employer entity
+   .Where(j => j.IsDetactive == false) // Filter out inactive jobs
+   .ToListAsync();
+            var allJob = _context.Job.AsQueryable();
+
+            var jobViewModels = jobs.Select(job => new JobViewModel
+            {
+                JobId = job.JobId,
+                Title = job.Title,
+                Description = job.Description,
+                Location = job.Location,
+                Salary = job.Salary,
+                Requirement = job.Requirement,
+                ApplicationDeadline = job.ApplicationDeadline,
+                EmployerName = job.Employer?.CompanyName,
+                ImageUrl = job.Employer?.ImageUrl ?? "default-image-url" // Provide a default image URL if not found
+
+            }).ToList();
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 string lowercaseSearchString = searchString.ToLower();
                 // Tìm kiếm theo title của job thay vì FullName của user
-                allRole = allRole.Where(s => s.Title.ToLower().Contains(lowercaseSearchString));
+                jobViewModels = jobViewModels
+            .Where(s => s.Title.ToLower().Contains(lowercaseSearchString))
+            .ToList(); // Convert to List to avoid casting issue
             }
 
-            return View(await allRole.ToListAsync());
+            return View(jobViewModels);
         }
 
 
@@ -109,7 +150,7 @@ namespace DACS_Web_Viec_Lam.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
             {
-                return Challenge(); 
+                return Challenge();
             }
 
             var jobSeeker = _context.JobSeeker
@@ -120,7 +161,7 @@ namespace DACS_Web_Viec_Lam.Controllers
                 .ToList();
 
             return View(notifications);
-          
+
         }
         [HttpPost]
         public async Task<IActionResult> MarkAsRead(int notificationId)
@@ -133,7 +174,7 @@ namespace DACS_Web_Viec_Lam.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("NotificationList"); 
+            return RedirectToAction("NotificationList");
         }
     }
 }

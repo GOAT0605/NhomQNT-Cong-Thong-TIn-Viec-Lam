@@ -24,22 +24,26 @@
             <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user"></i>
             </a>
-            <div class="dropdown-menu" aria-labelledby="userDropdown">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    if (User.IsInRole("JobSeeker"))
-                    {
-                        <a href="@Url.Action("Display","JobSeeker", new { area = "JobSeeker" } )" class="dropdown-item text-dark">CV</a>
-                    }
 
-                    if (User.IsInRole("Company"))
+            <div class="dropdown-menu" aria-labelledby="userDropdown">
+                <div class="dropdown-item text-dark">
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <a href="@Url.Action("Display","Company", new { area = "Company" } )" class="dropdown-item text-dark">Công Ty</a>
+                        if (User.IsInRole("JobSeeker"))
+                        {
+                            <a href="@Url.Action("Display","JobSeeker", new { area = "JobSeeker" } )" class="dropdown-item text-dark">CV</a>
+                        }
+
+                        if (User.IsInRole("Company"))
+                        {
+                            <a href="@Url.Action("Display","Company", new { area = "Company" } )" class="dropdown-item text-dark">Công Ty</a>
+                        }
                     }
-                }
+                </div>
+
                 <div class="dropdown-divider"></div>
                 <form id="logoutForm" class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Employer", new { area = "" })">
-                    <button id="logout" type="submit" class="btn btn-link dropdown-item text-dark">Thoát</button>
+                    <button id="logout" type="submit" class="btn btn-link dropdown-item">Thoát</button>
                 </form>
             </div>
         </li>
