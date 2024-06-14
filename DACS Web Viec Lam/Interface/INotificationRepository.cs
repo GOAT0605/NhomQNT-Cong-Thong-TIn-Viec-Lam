@@ -4,7 +4,7 @@ namespace DACS_Web_Viec_Lam.Interface
 {
     public interface INotificationRepository
     {
-        void AddNotification(int userId, string message);
-       
+        void AddJobSeekerNotification(int userId, string message);
+        void AddCompanyNotification(int userId, string message);
     }
 }

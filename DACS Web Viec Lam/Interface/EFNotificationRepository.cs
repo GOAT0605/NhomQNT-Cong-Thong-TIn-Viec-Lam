@@ -11,11 +11,23 @@ namespace DACS_Web_Viec_Lam.Interface
         {
             _context = context;
         }
-        public void AddNotification(int userId, string message)
+        public void AddJobSeekerNotification(int userId, string message)
         {
             var notification = new Notification
             {
-                UserId = userId,
+                JobseekerId = userId,
+                Message = message,
+                IsRead = false,
+                CreatedDate = DateTime.Now
+            };
+            _context.notifications.Add(notification);
+            _context.SaveChanges();
+        }
+        public void AddCompanyNotification(int userId, string message)
+        {
+            var notification = new Notification
+            {
+                CompanyId = userId,
                 Message = message,
                 IsRead = false,
                 CreatedDate = DateTime.Now
@@ -24,6 +36,5 @@ namespace DACS_Web_Viec_Lam.Interface
             _context.SaveChanges();
         }
 
-       
     }
 }

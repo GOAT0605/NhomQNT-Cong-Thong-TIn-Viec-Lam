@@ -10,6 +10,7 @@ using OfficeOpenXml;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DACS_Web_Viec_Lam.Controllers
 {
@@ -37,7 +38,7 @@ namespace DACS_Web_Viec_Lam.Controllers
             var jobSeeker = _context.JobSeeker.FirstOrDefault(j => j.userId == userId);
             return View(jobSeeker);
         }
-
+        //Nop don tuyen63 dung5
         [Authorize(Roles = SD.Role_JobSeeker)]
         [HttpPost]
         public async Task<IActionResult> Add(ApplicationList applicationList, int id)
@@ -47,15 +48,38 @@ namespace DACS_Web_Viec_Lam.Controllers
 
             if (jobSeeker != null)
             {
+                // Check if an application already exists for the same JobId and JobSeekerId with specified statuses
+                var existingApplication = _context.applicationLists
+                    .FirstOrDefault(a => a.JobId == id && a.JobSeekerId == jobSeeker.JobSeekerId &&
+                                         (a.Status == ApplicationStatus.Applied ||
+                                          a.Status == ApplicationStatus.NotChecked ||
+                                          (a.Status == ApplicationStatus.Declined &&
+                                           EF.Functions.DateDiffDay(a.ApplicationDate, DateTime.Now) <= 14)));
+
+                if (existingApplication != null)
+                {
+                    // Application with specified conditions already exists, redirect to home
+                    return RedirectToAction("Index", "Home");
+                }
+
                 applicationList = new ApplicationList
                 {
                     ApplicationDate = DateTime.Now,
                     JobSeekerId = jobSeeker.JobSeekerId,
                     JobId = id,
+                    Status = ApplicationStatus.NotChecked // Assuming you want to set the initial status to NotChecked
                 };
 
                 _context.applicationLists.Add(applicationList);
                 await _context.SaveChangesAsync();
+
+                var company = await _context.Job.FirstOrDefaultAsync(j => j.JobId == id);
+                var message = $"Application with name {jobSeeker.FullName} has been applied.";
+                await AddCompanyNotification((int)company.EmployerId, message);
+
+                var employer = await _context.Employers.FirstOrDefaultAsync(e => e.EmployerId == company.EmployerId);
+                EmailSender emailSender = new EmailSender();
+                bool email = emailSender.SendEmail(jobSeeker.Email, "Cảm ơn bạn đã gửi đươn ứng tuyển. Bài viết của bạn sẽ được hiển thị sau khi chúng tôi kiểm duyệt xong! Thân chào");
 
                 return RedirectToAction(nameof(ApplyQuene));
             }
@@ -177,24 +201,59 @@ namespace DACS_Web_Viec_Lam.Controllers
                 return BadRequest("Invalid application id.");
             }
 
-            var apply = await _context.applicationLists.FindAsync(id);
-            if (apply == null)
-            {
-                return NotFound($"Application with id {id} not found.");
-            }
 
-            apply.Status = ApplicationStatus.Applied;
+                var apply = await _context.applicationLists.FindAsync(id);
+                if (apply == null)
+                {
+                    return NotFound($"Application with id {id} not found.");
+                }
+                if(apply.Status == ApplicationStatus.NotChecked)
+            {
+                apply.Status = ApplicationStatus.Applied;
+      
+            }
             _context.Update(apply);
             await _context.SaveChangesAsync();
+            //thong bao
+
             var userId = apply.JobSeekerId;
             var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
             var message = $"Application with name {jobseeker.FullName} has been approved.";
+            EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
+            bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
             await AddNotification((int)userId, message);
+            //auto tu choi
+            var applicationsToDecline = await _context.applicationLists
+         .Where(j => j.JobSeekerId == userId && j.Status == ApplicationStatus.NotChecked)
+         .ToListAsync();
+
+            var message1 = $"Application with name {jobseeker.FullName} has been declined due to another company approved.";
+
+            // Update application status and fetch company details
+            foreach (var application in applicationsToDecline)
+            {
+                application.Status = ApplicationStatus.Declined;
+                _context.Update(application);
+
+                // Fetch the company details for the current application
+                var job = await _context.Job.FirstOrDefaultAsync(j => j.JobId == application.JobId);
+                if (job != null)
+                {
+                    await AddNotification((int)job.EmployerId, message1);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Apply");
         }
         public async Task AddNotification(int userId, string message)
         {
-            _notificationRepository.AddNotification(userId, message);
+            _notificationRepository.AddJobSeekerNotification(userId, message);
+        }
+        public async Task AddCompanyNotification(int userId, string message)
+        {
+            _notificationRepository.AddCompanyNotification(userId, message);
         }
         public async Task<IActionResult> Disapprove(int id)
         {
@@ -208,22 +267,61 @@ namespace DACS_Web_Viec_Lam.Controllers
             {
                 return NotFound($"Application with id {id} not found.");
             }
-
-            apply.Status = ApplicationStatus.Declined;
+            if (apply.Status == ApplicationStatus.NotChecked)
+            {
+                apply.Status = ApplicationStatus.Declined;
+    
+            }
             _context.Update(apply);
             await _context.SaveChangesAsync();
-
+            var userId = apply.JobSeekerId;
+            var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
+            var message = $"Application with name {jobseeker.FullName} has been declined.";
+            EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
+            bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
+            await AddNotification((int)userId, message);
+          
             return RedirectToAction("Apply");
+        }
+        public async Task<IActionResult> WithDraw(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest("Invalid application id.");
+            }
+
+            var apply = await _context.applicationLists.FindAsync(id);
+            if (apply == null)
+            {
+                return NotFound($"Application with id {id} not found.");
+            }
+            if(apply.Status == ApplicationStatus.NotChecked)
+            {
+                apply.Status = ApplicationStatus.WithDraw;
+            }
+            
+            _context.Update(apply);
+            await _context.SaveChangesAsync();
+            var userId = apply.JobSeekerId;
+            var jobseeker = _context.JobSeeker.FirstOrDefault(j => j.JobSeekerId == userId);
+            var message = $"Application with name {jobseeker.FullName} has been Withdraw.";
+            EmailSenderForApply emailSenderForApply = new EmailSenderForApply();
+            bool Email = emailSenderForApply.SendEmail(jobseeker.Email, message);
+            await AddNotification((int)userId, message);
+           
+
+            return RedirectToAction("ApplyQuene");
         }
 
         public async Task<IActionResult> Display(int id)
         {
-            var product = await _JobSeekerRepository.GetByIdAsync(id);
-            if (product == null)
+            var jobseeker = await _JobSeekerRepository.GetByIdAsync(id);
+
+            if (jobseeker == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(jobseeker);
         }
         [HttpGet]
         public async Task<IActionResult> ExportToExcel()

@@ -5,8 +5,17 @@
     Layout = "~/Views/Shared/head_foot.cshtml";
 }
 
-
-
+<h2>Danh Sách Thông Báo</h2>
+@if (!User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Company"))
+    {
+      
+        <form method="post" asp-action="MarkAllAsRead" asp-controller="Employer">
+            <button type="submit">Đọc tất cả</button>
+        </form>
+    }
+}
 
 <table class="table">
     <thead>

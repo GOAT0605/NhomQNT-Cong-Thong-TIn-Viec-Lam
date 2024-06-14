@@ -22,6 +22,7 @@ namespace DACS_Web_Viec_Lam.Controllers
         }
         public async Task<IActionResult> Index()
         {
+
             // Assuming you have a context or repository to access Jobs and Employers
             var jobtemp = await _context.Job
     .Include(j => j.Employer) // Include the related Employer entity
@@ -29,6 +30,7 @@ namespace DACS_Web_Viec_Lam.Controllers
     .ToListAsync();
             var allJob = _context.Job.AsQueryable();
             foreach (var job in jobtemp)
+
             {
                 if (DateTime.Now > job.ApplicationDeadline)
                 {
@@ -36,10 +38,12 @@ namespace DACS_Web_Viec_Lam.Controllers
                 }
             }
             await _context.SaveChangesAsync();
+
             var jobs = await _context.Job
     .Include(j => j.Employer) // Include the related Employer entity
     .Where(j => j.IsDetactive == false) // Filter out inactive jobs
     .ToListAsync();
+
 
             var jobViewModels = jobs.Select(job => new JobViewModel
             {
@@ -51,7 +55,9 @@ namespace DACS_Web_Viec_Lam.Controllers
                 Requirement = job.Requirement,
                 ApplicationDeadline = job.ApplicationDeadline,
                 EmployerName = job.Employer?.CompanyName,
+
                 ImageUrl = job.Employer?.ImageUrl ?? "default-image-url" // Provide a default image URL if not found
+
 
             }).ToList();
             var random = new Random();
@@ -74,7 +80,12 @@ namespace DACS_Web_Viec_Lam.Controllers
             {
                 return NotFound();
             }
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var jobSeeker = _context.JobSeeker.FirstOrDefault(j => j.userId == userId);
+            if (jobSeeker == null)
+            {
+                return RedirectToAction("Add", "JobSeeker", new { area = "JobSeeker" });
+            }
             var jobViewModel = new JobViewModel
             {
                 JobId = job.JobId,
@@ -106,6 +117,7 @@ namespace DACS_Web_Viec_Lam.Controllers
         {
             return View();
         }
+
 
         public async Task<IActionResult> Search(string searchString)
         {
@@ -146,6 +158,7 @@ namespace DACS_Web_Viec_Lam.Controllers
 
 
         public IActionResult NotificationLIst()
+
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -153,19 +166,33 @@ namespace DACS_Web_Viec_Lam.Controllers
                 return Challenge();
             }
 
-            var jobSeeker = _context.JobSeeker
-               .FirstOrDefault(j => j.userId == userId);
-            var notifications = _context.notifications
-                .Where(n => n.UserId == jobSeeker.JobSeekerId && !n.IsRead)
-                .OrderByDescending(n => n.CreatedDate)
-                .ToList();
+            var jobSeeker = _context.JobSeeker.FirstOrDefault(j => j.userId == userId);
+            var company = _context.Employers.FirstOrDefault(j => j.userId == userId);
+            IEnumerable<Notification> notifications = new List<Notification>();
+
+            if (User.IsInRole("JobSeeker") && jobSeeker != null)
+            {
+                notifications = _context.notifications
+                    .Where(n => n.JobseekerId == jobSeeker.JobSeekerId && !n.IsRead)
+                    .OrderByDescending(n => n.CreatedDate)
+                    .ToList();
+            }
+            else if (User.IsInRole("Company") && company != null)
+            {
+                notifications = _context.notifications
+                    .Where(n => n.CompanyId == company.EmployerId && !n.IsRead)
+                    .OrderByDescending(n => n.CreatedDate)
+                    .ToList();
+            }
 
             return View(notifications);
 
         }
+
         [HttpPost]
         public async Task<IActionResult> MarkAsRead(int notificationId)
         {
+         
             var notification = _context.notifications.FirstOrDefault(j => j.NotificationId == notificationId);
 
             if (notification != null)
@@ -176,5 +203,34 @@ namespace DACS_Web_Viec_Lam.Controllers
 
             return RedirectToAction("NotificationList");
         }
+        public async Task<IActionResult> MarkAllAsRead()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Challenge();
+            }
+            var company = _context.Employers.FirstOrDefault(j => j.userId == userId);
+            if (company == null)
+            {
+                return NotFound();
+            }
+            var notifications = _context.notifications
+              .Where(n => n.CompanyId == company.EmployerId && !n.IsRead)
+              .OrderByDescending(n => n.CreatedDate)
+              .ToList();
+
+            if (notifications.Any())
+            {
+                foreach (var notification in notifications)
+                {
+                    notification.IsRead = true;
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("NotificationList");
+        }
     }
 }
+//var cvs = await _context.applicationLists.Where(j => j.JobSeekerId == jobSeeker.JobSeekerId).ToListAsync();

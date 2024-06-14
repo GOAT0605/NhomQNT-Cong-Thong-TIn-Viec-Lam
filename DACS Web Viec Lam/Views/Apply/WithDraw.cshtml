@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "WithDraw";
+    Layout = "~/Views/Shared/head_foot.cshtml";
+}
+
+@model DACS_Web_Viec_Lam.Models.ApplicationList
+
+<form asp-action="WithDraw" method="post">
+    <div class="form-group">
+        <label asp-for="comment">Bình luận</label>
+        <textarea asp-for="comment" class="form-control"></textarea>
+    </div>
+    <input type="hidden" asp-for="ApplicationId" />
+    <button type="submit" class="btn btn-success">Approve Application</button>
+</form>

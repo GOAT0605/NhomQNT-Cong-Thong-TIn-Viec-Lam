@@ -27,6 +27,7 @@ namespace DACS_Web_Viec_Lam.Models
     {
         NotChecked = 0,
         Applied = 1,
-        Declined = 2
+        Declined = 2,
+        WithDraw=4
     }
 }
