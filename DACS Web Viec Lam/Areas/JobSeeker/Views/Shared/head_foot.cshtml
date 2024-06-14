@@ -15,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -40,8 +40,6 @@
             </div>
         </div>
         <!-- Spinner End -->
-
-
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="@Url.Action("Index","Employer", new { area = ""})" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
@@ -53,7 +51,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
                     <a href="@Url.Action("Index","Employer", new { area = ""})" class="nav-item nav-link active">Trang chủ</a>
-                    
+
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Công việc</a>
                         <div class="dropdown-menu rounded-0 m-0">
@@ -61,19 +59,19 @@
                             <a href="@Url.Action("JobDetail","Employer", new { area = ""})" class="dropdown-item">Chi tiết</a>
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="@Url.Action("Category","Employer")" class="dropdown-item">Loại công việc</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404</a>
-                        </div>
+                    @*    <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                    <a href="@Url.Action("Category","Employer")" class="dropdown-item">Loại công việc</a>
+                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                    <a href="404.html" class="dropdown-item">404</a>
                     </div>
+                    </div> *@
                     @* <a href="@Url.Action("Category","Employer")" class="nav-item nav-link">Đăng nhập</a>
                     <a href="about.html" class="nav-item nav-link">Đăng ký</a> *@
-                    <partial name="_LoginPartial" />
+
                 </div>
-               @*  <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Đăng công việc<i class="fa fa-arrow-right ms-3"></i></a> *@
+                @*  <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Đăng công việc<i class="fa fa-arrow-right ms-3"></i></a> *@
                 @if (User.Identity.IsAuthenticated)
                 {
                     @*     if (User.IsInRole("Admin"))
@@ -86,7 +84,7 @@
                 } *@
                     if (User.IsInRole("JobSeeker"))
                     {
-                        <a href="@Url.Action("Display","JobSeeker", new { area = "JobSeeker" } )" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">CV<i class=""></i></a>
+
                         @*  <a href="@Url.Action("Index","JobSeeker", new { area = "JobSeeker" } )" class="nav-item nav-link active">Trang chủ</a> *@
                         @*   <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="JobSeeker" asp-controller="JobSeeker" asp-action="Index">CV</a>
@@ -101,10 +99,9 @@
                 }
                 @*  <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Đăng công việc<i class="fa fa-arrow-right ms-3"></i></a> *@
             </div>
+            <partial name="_LoginPartial" />
         </nav>
         <!-- Navbar End -->
-
-
         @RenderBody()
 
         <!-- Footer Start -->
@@ -154,10 +151,10 @@
                 <div class="copyright">
                     <div class="row">
                         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved. 
-							
-							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-							Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                            &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
                             </br>Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
                         </div>
                         <div class="col-md-6 text-center text-md-end">
@@ -173,8 +170,6 @@
             </div>
         </div>
         <!-- Footer End -->
-
-
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>

@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
 {
     [Area("Company")]
-    [Authorize(Roles = SD.Role_Company)]
+    [Authorize(Roles = SD.Role_Company + "," + SD.Role_Admin)]
     public class JobController : Controller
     {
         private readonly IJobRepository _jobRepository;
@@ -22,6 +22,9 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             _titleRepository = titleRepository;
             _context = context;
         }
+
+
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Company)]
         public async Task<IActionResult> Index()
         {
             var allJob = _context.Job.AsQueryable();
@@ -35,19 +38,19 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             //}
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var employer = _context.Employers.FirstOrDefault(j => j.userId == userId);
+            var employer = _context.Employers.FirstOrDefault(j => j.userId == userId);
 
-                if (employer == null)
-                {
-                    // No employer associated with the user, redirect to the Add action in CompanyController
-                    return RedirectToAction("Add", "Company");
-                }
+            if (employer == null)
+            {
+                // No employer associated with the user, redirect to the Add action in CompanyController
+                return RedirectToAction("Add", "Company");
+            }
             // Lọc ra những sản phẩm không bị vô hiệu hoa
             allJob = allJob.Where(p => !p.IsDetactive);
             // Retrieve job entries that match the employer's ID
             var employers = await _jobRepository.GetByUserIdAsync(employer.EmployerId);
-                return View(employers);
-            
+            return View(employers);
+
 
         }
         public async Task<IActionResult> AddAsync()
@@ -58,33 +61,33 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             return View();
         }
         [HttpPost]
-      public async Task<IActionResult> Add(Job job)
-{
-    if (ModelState.IsValid)
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var EmployerID = _context.Employers.FirstOrDefault(j => j.userId == userId);
-
-        if (EmployerID == null)
+        public async Task<IActionResult> Add(Job job)
         {
-            // No Employer ID found, redirect user to Add view
-            ModelState.AddModelError("", "You need to create an employer profile first.");
-            var title = await _titleRepository.GetAllAsync();
-            ViewBag.TitleId = new SelectList(title, "Id", "Name");
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var EmployerID = _context.Employers.FirstOrDefault(j => j.userId == userId);
+
+                if (EmployerID == null)
+                {
+                    // No Employer ID found, redirect user to Add view
+                    ModelState.AddModelError("", "You need to create an employer profile first.");
+                    var title = await _titleRepository.GetAllAsync();
+                    ViewBag.TitleId = new SelectList(title, "Id", "Name");
+                    return View(job);
+                }
+
+                // Employer ID found, proceed with adding the job
+                job.EmployerId = EmployerID.EmployerId;
+                await _jobRepository.AddAsync(job);
+                return RedirectToAction(nameof(Index));
+            }
+
+            // ModelState is not valid, return the Add view with validation errors
+            var titles = await _titleRepository.GetAllAsync();
+            ViewBag.TitleId = new SelectList(titles, "Id", "Name");
             return View(job);
         }
-
-        // Employer ID found, proceed with adding the job
-        job.EmployerId = EmployerID.EmployerId;
-        await _jobRepository.AddAsync(job);
-        return RedirectToAction(nameof(Index));
-    }
-
-    // ModelState is not valid, return the Add view with validation errors
-         var titles = await _titleRepository.GetAllAsync();
-          ViewBag.TitleId = new SelectList(titles, "Id", "Name");
-            return View(job);
-    }
 
 
         public async Task<IActionResult> Display(int id)
@@ -110,7 +113,7 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             return View(Employer);
         }
 
-      
+
         [HttpPost]
         public async Task<IActionResult> Update(int id, Models.Job job)
         {
@@ -124,7 +127,8 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
             return View(job);
         }
         [HttpPost]
-        [Authorize(Roles = "Company")]
+
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Company)]
         public async Task<IActionResult> DeactivateProduct(int id)
         {
             var product = await _context.Job.FindAsync(id);
@@ -140,7 +144,8 @@ namespace DACS_Web_Viec_Lam.Areas.Company.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Company")]
+
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Company)]
 
         public async Task<IActionResult> ReactivateProduct(int id)
         {

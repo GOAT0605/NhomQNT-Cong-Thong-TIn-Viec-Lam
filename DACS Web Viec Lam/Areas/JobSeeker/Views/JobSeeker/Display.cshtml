@@ -1,57 +1,50 @@
-﻿@model DACS_Web_Viec_Lam.Models.JobSeeker
-
-@{
-    ViewData["Title"] = "Display";
-    Layout = "~/Areas/JobSeeker/Views/Shared/head_foot.cshtml";
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/head_foot.cshtml";
 }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông Tin Người Dùng</title>
+    <link href="~/css/Displaystyle.css" rel="stylesheet" />
 
-<h1>Display</h1>
+</head>
+<body>
+    <div class="container">
+        <h1>Thông Tin Người Dùng</h1>
+        <div class="details">
+            <div class="form-group">
+                <label>Họ tên:</label>
+                <span>@Model.FullName</span>
+            </div>
+            <div class="form-group">
+                <label>Email liên hệ:</label>
+                <span>@Model.Email</span>
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại:</label>
+                <span>@Model.PhoneNumber</span>
+            </div>
+            <div class="form-group">
+                <label>Mô tả:</label>
+                <span>@Model.Description</span>
+            </div>
+            <div class="form-group">
+                <label>Kinh nghiệm:</label>
+                <span>@Model.Experiences</span>
+            </div>
+            <div class="form-group">
+                <label>Học vấn:</label>
+                <span>@Model.Educations</span>
+            </div>
+            <div class="form-group">
+                <label>Ảnh đại diện:</label>
+                <img src="@Model.ImageUrl" alt="Ảnh đại diện" style="width:200px; height: 100px;">
+            </div>
+        </div>
+        <a asp-action="Edit" asp-route-id="@Model?.JobSeekerId">Sửa</a>
+    </div>
 
-<div>
-    <h4>JobSeeker</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Experiences)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Experiences)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Educations)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Educations)
-        <dd class="col-sm-10">
-            <th>Avatar</th> <img src="@Model.ImageUrl " alt="Employer Image" style="width:300px; height: auto;" />
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.JobSeekerId">Edit</a> |
-    @* <a asp-action="Index">Back to List</a> *@
-</div>
+</body>
+</html>

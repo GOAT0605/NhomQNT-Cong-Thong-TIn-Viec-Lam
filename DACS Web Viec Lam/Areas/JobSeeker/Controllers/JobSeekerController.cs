@@ -18,7 +18,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly IJobSeeker1Repository _JobSeekerRepository;
- 
+
 
         public JobSeekerController(IJobSeeker1Repository JobSeekerRepository, ApplicationDbContext context)
         {
@@ -27,7 +27,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 
         }
         [Area("JobSeeker")]
-        [Authorize(Roles =  SD.Role_Admin)]
+        [Authorize(Roles = SD.Role_Admin)]
         public async Task<IActionResult> Index()
         {
             var JobSeekers = await _JobSeekerRepository.GetAllAsync();
@@ -43,7 +43,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
 
         // Xử lý thêm sản phẩm mới
         [HttpPost]
-        public async Task<IActionResult> Add(Models.JobSeeker JobSeeker, IFormFile imageUrl,List<IFormFile> imageUrls)
+        public async Task<IActionResult> Add(Models.JobSeeker JobSeeker, IFormFile imageUrl, List<IFormFile> imageUrls)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
         private async Task<string> SaveImage(IFormFile image)
         {
             var savePath = Path.Combine("wwwroot/images", image.FileName); // Thay            đổi đường dẫn theo cấu hình của bạn
- using (var fileStream = new FileStream(savePath, FileMode.Create))
+            using (var fileStream = new FileStream(savePath, FileMode.Create))
             {
                 await image.CopyToAsync(fileStream);
             }
@@ -98,7 +98,7 @@ namespace DACS_Web_Viec_Lam.Areas.JobSeeker.Controllers
             return View(jobSeeker);
         }
 
-       // Hiển thị form cập nhật sản phẩm
+        // Hiển thị form cập nhật sản phẩm
         public async Task<IActionResult> Update(string id)
         {
             var JobSeeker = await _JobSeekerRepository.GetByIdAsync(id);

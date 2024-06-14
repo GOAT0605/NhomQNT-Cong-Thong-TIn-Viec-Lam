@@ -1,64 +1,45 @@
-﻿@model DACS_Web_Viec_Lam.Models.Employer
-
-@{
-    ViewData["Title"] = "Display";
+﻿@{
+    ViewData["Title"] = "Index";
     Layout = "~/Areas/Company/Views/Shared/head_foot.cshtml";
 }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông Tin Nhà Tuyển Dụng</title>
+    <link href="~/css/Displaystyle.css" rel="stylesheet" />
 
-<h1>Display</h1>
-
-<div>
-
-    <h4>Employer</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CompanyName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CompanyName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CompanyDiscription)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CompanyDiscription)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.contactMail)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.contactMail)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.contactPhone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.contactPhone)
-        </dd>
-        <dd class="col-sm-10">
-            <th>Logo</th> <img src="@Model.ImageUrl " alt="Employer Image" style="width:300px; height: auto;" />
-        </dd>
-
-    </dl>
-    @* <div>
-
-        @if (Model.ImageUrls != null)
-        {
-            foreach (var imageUrl in Model.ImageUrls)
-            {
-                <img src="@imageUrl" alt="Product Image" style="width:300px; height: auto;" />
-            }
-        }
-    </div> *@
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.EmployerId">Edit</a> |
-  @*   <a asp-action="Index">Back to List</a> *@
-</div>
+</head>
+<body>
+    <div class="container">
+        <h1>Thông Tin Nhà Tuyển Dụng</h1>
+        <div class="details">
+            <div class="form-group">
+                <label>Tên công ty:</label>
+                <span>@Model.CompanyName</span>
+            </div>
+            <div class="form-group">
+                <label>Địa chỉ:</label>
+                <span>@Model.Address</span>
+            </div>
+            <div class="form-group">
+                <label>Mô tả công ty:</label>
+                <span>@Model.CompanyDiscription</span>
+            </div>
+            <div class="form-group">
+                <label>Email liên hệ:</label>
+                <span>@Model.contactMail</span>
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại liên hệ:</label>
+                <span>@Model.contactPhone</span>
+            </div>
+            <div class="form-group">
+                <label>Logo:</label>
+                <img src="@Model.ImageUrl" alt="Hình ảnh nhà tuyển dụng" style="width:200px; height: 100px;">
+            </div>
+        </div>
+        <a asp-action="Edit"><button type="submit" class="btn btn-primary">Sửa</button></a>
+    </div>
+</body>
+</html>

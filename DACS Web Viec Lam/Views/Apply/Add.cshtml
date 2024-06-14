@@ -1,53 +1,52 @@
-﻿
+﻿@model DACS_Web_Viec_Lam.Models.JobSeeker
 @{
     ViewData["Title"] = "Add";
     Layout = "~/Views/Shared/head_foot.cshtml";
 }
-
-@model DACS_Web_Viec_Lam.Models.JobSeeker
-<h2>Apply for Job</h2>
-
-<form asp-action="Add" method="post">
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Experiences)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Experiences)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Educations)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Educations)
-        <dd class="col-sm-10">
-            <th>Avatar</th> <img src="@Model.ImageUrl " alt="Employer Image" style="width:300px; height: auto;" />
-        </dd>
-    </dl>
-    <!-- Add other form fields as necessary -->
-    <button type="submit" class="btn btn-primary">Submit Application</button>
-</form>
+<head>
+    <h1>Thông tin Người dùng</h1>
+    <hr />
+    <link href="~/css/addstyle.css" rel="stylesheet" />
+</head>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label">Họ tên:</label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email:</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label">Số điện thoại:</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Mô tả:</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Experiences" class="control-label">Kinh nghiệm:</label>
+                <input asp-for="Experiences" class="form-control" />
+                <span asp-validation-for="Experiences" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Educations" class="control-label">Học vấn:</label>
+                <input asp-for="Educations" class="form-control" />
+                <span asp-validation-for="Educations" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl">Ảnh đại diện</label>
+                <img src="@Model.ImageUrl" alt="Employer Image" style="width:300px; height: auto;" />
+            </div>
+            <button type="submit" class="btn btn-primary">Xác nhận ứng tuyển</button>
+        </form>
+    </div>
+</div>

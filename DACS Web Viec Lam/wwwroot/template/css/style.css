@@ -116,6 +116,7 @@
 .navbar-light .navbar-brand,
 .navbar-light a.btn {
     height: 75px;
+    border-top: 1px solid #EEEEEE;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -265,6 +266,9 @@
     border-color: rgba(0, 0, 0, .08);
     box-shadow: none;
 }
+
+
+
 
 
 /*** Job Listing ***/

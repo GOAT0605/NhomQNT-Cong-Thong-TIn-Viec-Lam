@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data;
 
 namespace DACS_Web_Viec_Lam.Areas.Identity.Pages.Account
 {
@@ -118,18 +119,55 @@ namespace DACS_Web_Viec_Lam.Areas.Identity.Pages.Account
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
             }
+            var user = await _userManager.GetUserAsync(User);
+
+            // Kiểm tra nếu người dùng không null
+            List<SelectListItem> roleList;
+
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                // Kiểm tra nếu người dùng là admin
+                if (roles.Contains(SD.Role_Admin))
+                {
+                    // Admin có thể chọn tất cả các quyền
+                    roleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                    {
+                        Text = i,
+                        Value = i
+                    }).ToList();
+                }
+                else
+                {
+                    // Người dùng không phải admin chỉ có thể chọn JobSeeker hoặc Company
+                    roleList = _roleManager.Roles.Where(x => x.Name == SD.Role_JobSeeker || x.Name == SD.Role_Company)
+                                                 .Select(i => new SelectListItem
+                                                 {
+                                                     Text = i.Name,
+                                                     Value = i.Name
+                                                 }).ToList();
+                }
+            }
+            else
+            {
+                // Xử lý khi người dùng là null, ví dụ: thiết lập roleList cho người dùng chưa xác thực
+                roleList = new List<SelectListItem>
+        {
+            new SelectListItem { Text = SD.Role_JobSeeker, Value = SD.Role_JobSeeker },
+            new SelectListItem { Text = SD.Role_Company, Value = SD.Role_Company }
+        };
+            }
+
+            // Thiết lập dữ liệu cho Input
             Input = new()
             {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
-                {
-                    Text = i,
-                    Value = i
-                })
+                RoleList = roleList
             };
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -140,22 +178,23 @@ namespace DACS_Web_Viec_Lam.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
                 user.FullName = Input.FullName;
+                if (!String.IsNullOrEmpty(Input.Role))
+                {
+                    await _userManager.AddToRoleAsync(user, Input.Role);
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, SD.Role_JobSeeker);
+                }
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
+                    TempData["SuccessMessage"] = "Registered Successfully";
                     _logger.LogInformation("User created a new account with password.");
-                    if (!String.IsNullOrEmpty(Input.Role))
-                    {
-                        await _userManager.AddToRoleAsync(user, Input.Role);
 
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, SD.Role_JobSeeker);
-                    }
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -168,15 +207,8 @@ namespace DACS_Web_Viec_Lam.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
+                    return RedirectToPage("/Account/Login", new { area = "Identity" });
                 }
                 foreach (var error in result.Errors)
                 {
@@ -184,7 +216,14 @@ namespace DACS_Web_Viec_Lam.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // Thiết lập lại role list nếu có lỗi
+            Input.RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+            {
+                Text = i,
+                Value = i
+            });
+
+            // Nếu có lỗi, hiển thị lại form đăng ký
             return Page();
         }
 
@@ -197,8 +236,8 @@ namespace DACS_Web_Viec_Lam.Areas.Identity.Pages.Account
             catch
             {
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
